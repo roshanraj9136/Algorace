@@ -1,0 +1,1213 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: AlgoRace API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: problems
+    description: Problem bank
+  - name: matches
+    description: Match management
+  - name: submissions
+    description: Code submissions
+  - name: leaderboard
+    description: Global leaderboard
+  - name: profile
+    description: User profiles
+  - name: matchmaking
+    description: Matchmaking queue
+  - name: friends
+    description: Friend system and direct challenges
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email already taken
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout current user
+      responses:
+        "204":
+          description: Logged out
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current authenticated user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /problems:
+    get:
+      operationId: listProblems
+      tags: [problems]
+      summary: List all problems with optional filters
+      parameters:
+        - name: difficulty
+          in: query
+          schema:
+            type: string
+            enum: [easy, medium, hard]
+        - name: tag
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of problems
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProblemSummary"
+
+  /problems/featured:
+    get:
+      operationId: getFeaturedProblems
+      tags: [problems]
+      summary: Get featured problems for the dashboard
+      responses:
+        "200":
+          description: Featured problems
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProblemSummary"
+
+  /problems/{id}:
+    get:
+      operationId: getProblem
+      tags: [problems]
+      summary: Get a problem by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Problem detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /problems/{id}/run:
+    post:
+      operationId: runPractice
+      tags: [problems]
+      summary: Run code against visible test cases in practice mode
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunCodeBody"
+      responses:
+        "200":
+          description: Run result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunResult"
+
+  /matches:
+    get:
+      operationId: listMyMatches
+      tags: [matches]
+      summary: List matches for the current user
+      responses:
+        "200":
+          description: Match list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchSummary"
+
+    post:
+      operationId: createMatch
+      tags: [matches]
+      summary: Create a private room match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMatchBody"
+      responses:
+        "201":
+          description: Match created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+
+  /matches/{id}:
+    get:
+      operationId: getMatch
+      tags: [matches]
+      summary: Get a match by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Match detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /matches/join/{inviteCode}:
+    post:
+      operationId: joinMatchByCode
+      tags: [matches]
+      summary: Join a private match by invite code
+      parameters:
+        - name: inviteCode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Joined match
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "404":
+          description: Match not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /submissions:
+    post:
+      operationId: submitCode
+      tags: [submissions]
+      summary: Submit code for a match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitCodeBody"
+      responses:
+        "200":
+          description: Submission result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmissionResult"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Get top players by ELO
+      responses:
+        "200":
+          description: Leaderboard
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /profile/{userId}:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get a user profile with stats
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProfile"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /profile/{userId}/elo-history:
+    get:
+      operationId: getEloHistory
+      tags: [profile]
+      summary: Get ELO history for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: ELO history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EloHistoryEntry"
+
+  /profile/{userId}/matches:
+    get:
+      operationId: getUserMatches
+      tags: [profile]
+      summary: Get recent match history for a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Recent matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MatchSummary"
+
+  /matchmaking/join:
+    post:
+      operationId: joinQueue
+      tags: [matchmaking]
+      summary: Join the matchmaking queue
+      responses:
+        "200":
+          description: Queue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueStatus"
+
+  /matchmaking/leave:
+    post:
+      operationId: leaveQueue
+      tags: [matchmaking]
+      summary: Leave the matchmaking queue
+      responses:
+        "204":
+          description: Left queue
+
+  /matchmaking/status:
+    get:
+      operationId: getQueueStatus
+      tags: [matchmaking]
+      summary: Get current matchmaking queue status
+      responses:
+        "200":
+          description: Queue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueStatus"
+
+  /friends:
+    get:
+      operationId: listFriends
+      tags: [friends]
+      summary: List the current user's accepted friends
+      responses:
+        "200":
+          description: Friend list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Friend"
+
+  /friends/requests:
+    get:
+      operationId: listFriendRequests
+      tags: [friends]
+      summary: List the current user's pending incoming friend requests
+      responses:
+        "200":
+          description: Friend request list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FriendRequest"
+
+    post:
+      operationId: sendFriendRequest
+      tags: [friends]
+      summary: Send a friend request to another user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendFriendRequestBody"
+      responses:
+        "201":
+          description: Friend request sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FriendRequest"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Friendship already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /friends/requests/{id}/accept:
+    post:
+      operationId: acceptFriendRequest
+      tags: [friends]
+      summary: Accept a pending friend request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Friend request accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Friend"
+        "404":
+          description: Request not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /friends/requests/{id}/decline:
+    post:
+      operationId: declineFriendRequest
+      tags: [friends]
+      summary: Decline a pending friend request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Friend request declined
+        "404":
+          description: Request not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /friends/search:
+    get:
+      operationId: searchUsers
+      tags: [friends]
+      summary: Search for users by name or email to add as friends
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Matching users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserSearchResult"
+
+  /friends/{userId}:
+    delete:
+      operationId: removeFriend
+      tags: [friends]
+      summary: Remove a friend
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Friend removed
+        "404":
+          description: Friendship not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /friends/{userId}/challenge:
+    post:
+      operationId: challengeFriend
+      tags: [friends]
+      summary: Challenge a friend to a direct match
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChallengeFriendBody"
+      responses:
+        "201":
+          description: Challenge created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Not friends with this user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /stats/active:
+    get:
+      operationId: getActiveStats
+      tags: [leaderboard]
+      summary: Get active player count and platform stats
+      responses:
+        "200":
+          description: Platform stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - name
+        - password
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        elo:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - token
+        - id
+        - email
+        - name
+        - elo
+        - wins
+        - losses
+        - createdAt
+
+    AuthUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        elo:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - email
+        - name
+        - elo
+        - wins
+        - losses
+        - createdAt
+
+    ProblemSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - title
+        - slug
+        - difficulty
+        - tags
+
+    ProblemExample:
+      type: object
+      properties:
+        input:
+          type: string
+        output:
+          type: string
+        explanation:
+          type: ["string", "null"]
+      required:
+        - input
+        - output
+        - explanation
+
+    Problem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        tags:
+          type: array
+          items:
+            type: string
+        constraints:
+          type: string
+        examples:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProblemExample"
+        starterCodeJs:
+          type: string
+        starterCodePy:
+          type: string
+      required:
+        - id
+        - title
+        - slug
+        - description
+        - difficulty
+        - tags
+        - constraints
+        - examples
+        - starterCodeJs
+        - starterCodePy
+
+    RunCodeBody:
+      type: object
+      properties:
+        language:
+          type: string
+          enum: [javascript, python]
+        code:
+          type: string
+      required:
+        - language
+        - code
+
+    TestCaseResult:
+      type: object
+      properties:
+        passed:
+          type: boolean
+        input:
+          type: string
+        expectedOutput:
+          type: string
+        actualOutput:
+          type: string
+        error:
+          type: ["string", "null"]
+      required:
+        - passed
+        - input
+        - expectedOutput
+        - actualOutput
+        - error
+
+    RunResult:
+      type: object
+      properties:
+        passed:
+          type: integer
+        total:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestCaseResult"
+      required:
+        - passed
+        - total
+        - results
+
+    CreateMatchBody:
+      type: object
+      properties:
+        problemId:
+          type: ["integer", "null"]
+      required: []
+
+    MatchPlayer:
+      type: object
+      properties:
+        userId:
+          type: integer
+        name:
+          type: string
+        elo:
+          type: integer
+        testsPassedCount:
+          type: ["integer", "null"]
+        totalTests:
+          type: ["integer", "null"]
+        language:
+          type: ["string", "null"]
+        submittedAt:
+          type: ["string", "null"]
+      required:
+        - userId
+        - name
+        - elo
+        - testsPassedCount
+        - totalTests
+        - language
+        - submittedAt
+
+    Match:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum: [waiting, active, finished, abandoned]
+        inviteCode:
+          type: ["string", "null"]
+        problemId:
+          type: integer
+        problem:
+          $ref: "#/components/schemas/Problem"
+        players:
+          type: array
+          items:
+            $ref: "#/components/schemas/MatchPlayer"
+        winnerId:
+          type: ["integer", "null"]
+        startedAt:
+          type: ["string", "null"]
+        endedAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - status
+        - inviteCode
+        - problemId
+        - problem
+        - players
+        - winnerId
+        - startedAt
+        - endedAt
+        - createdAt
+
+    MatchSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+        problemTitle:
+          type: string
+        problemDifficulty:
+          type: string
+        opponentName:
+          type: ["string", "null"]
+        opponentElo:
+          type: ["integer", "null"]
+        won:
+          type: ["boolean", "null"]
+        eloChange:
+          type: ["integer", "null"]
+        duration:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - status
+        - problemTitle
+        - problemDifficulty
+        - opponentName
+        - opponentElo
+        - won
+        - eloChange
+        - duration
+        - createdAt
+
+    SubmitCodeBody:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        language:
+          type: string
+          enum: [javascript, python]
+        code:
+          type: string
+      required:
+        - matchId
+        - language
+        - code
+
+    SubmissionResult:
+      type: object
+      properties:
+        passed:
+          type: integer
+        total:
+          type: integer
+        allPassed:
+          type: boolean
+        won:
+          type: boolean
+        eloChange:
+          type: ["integer", "null"]
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestCaseResult"
+      required:
+        - passed
+        - total
+        - allPassed
+        - won
+        - eloChange
+        - results
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        elo:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        winRate:
+          type: number
+        totalMatches:
+          type: integer
+      required:
+        - rank
+        - userId
+        - name
+        - elo
+        - wins
+        - losses
+        - winRate
+        - totalMatches
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        elo:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        totalMatches:
+          type: integer
+        winRate:
+          type: number
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - elo
+        - wins
+        - losses
+        - totalMatches
+        - winRate
+        - createdAt
+
+    EloHistoryEntry:
+      type: object
+      properties:
+        matchId:
+          type: integer
+        oldElo:
+          type: integer
+        newElo:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - matchId
+        - oldElo
+        - newElo
+        - createdAt
+
+    QueueStatus:
+      type: object
+      properties:
+        inQueue:
+          type: boolean
+        queueSize:
+          type: integer
+        matchId:
+          type: ["integer", "null"]
+      required:
+        - inQueue
+        - queueSize
+        - matchId
+
+    Friend:
+      type: object
+      properties:
+        userId:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        elo:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        friendshipId:
+          type: integer
+        since:
+          type: string
+      required:
+        - userId
+        - name
+        - email
+        - elo
+        - wins
+        - losses
+        - friendshipId
+        - since
+
+    FriendRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        requesterId:
+          type: integer
+        requesterName:
+          type: string
+        requesterEmail:
+          type: string
+        requesterElo:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - requesterId
+        - requesterName
+        - requesterEmail
+        - requesterElo
+        - createdAt
+
+    UserSearchResult:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        elo:
+          type: integer
+        relationship:
+          type: string
+          enum: [none, pending_outgoing, pending_incoming, friends, self]
+      required:
+        - id
+        - name
+        - email
+        - elo
+        - relationship
+
+    SendFriendRequestBody:
+      type: object
+      properties:
+        userId:
+          type: integer
+      required:
+        - userId
+
+    ChallengeFriendBody:
+      type: object
+      properties:
+        problemId:
+          type: ["integer", "null"]
+      required: []
+
+    PlatformStats:
+      type: object
+      properties:
+        activePlayers:
+          type: integer
+        totalMatches:
+          type: integer
+        totalProblems:
+          type: integer
+        matchesToday:
+          type: integer
+      required:
+        - activePlayers
+        - totalMatches
+        - totalProblems
+        - matchesToday

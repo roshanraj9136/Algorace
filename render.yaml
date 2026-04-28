@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: algorace-api
+    runtime: node
+    plan: free
+    buildCommand: npm install -g pnpm && pnpm install --frozen-lockfile && pnpm run build
+    startCommand: node artifacts/api-server/dist/index.mjs
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: PORT
+        value: 8080
+      - key: NODE_ENV
+        value: production
