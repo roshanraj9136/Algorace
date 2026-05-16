@@ -32,6 +32,15 @@ app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (_req, res) => {
+  res.json({
+    name: "AlgoRace API",
+    status: "ok",
+    health: "/api/healthz",
+    app: "https://algorace-omega.vercel.app",
+  });
+});
+
 app.use("/api", router);
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   logger.error({ err, reqId: req.id }, "Unhandled API Error");
