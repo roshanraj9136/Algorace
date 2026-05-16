@@ -28,8 +28,8 @@ router.post("/", requireAuth, async (req, res) => {
     return;
   }
 
-  if (!["javascript", "python"].includes(language)) {
-    res.status(400).json({ error: "language must be javascript or python" });
+  if (!["cpp", "java"].includes(language)) {
+    res.status(400).json({ error: "language must be cpp or java" });
     return;
   }
 
@@ -58,7 +58,7 @@ router.post("/", requireAuth, async (req, res) => {
   }
 
   const [problem] = await db
-    .select({ testCases: problemsTable.testCases })
+    .select({ testCases: problemsTable.testCases, signature: problemsTable.signature })
     .from(problemsTable)
     .where(eq(problemsTable.id, match.problemId))
     .limit(1);
@@ -69,9 +69,10 @@ router.post("/", requireAuth, async (req, res) => {
   }
 
   const results = await runTestCases(
-    language as "javascript" | "python",
+    language as "cpp" | "java",
     code,
-    problem.testCases
+    problem.testCases,
+    problem.signature
   );
 
   const passed = results.filter((r) => r.passed).length;
@@ -81,7 +82,7 @@ router.post("/", requireAuth, async (req, res) => {
   await db
     .update(matchPlayersTable)
     .set({
-      language: language as "javascript" | "python",
+      language: language as "cpp" | "java",
       finalCode: code,
       testsPassedCount: passed,
       totalTests: total,
@@ -105,13 +106,11 @@ router.post("/", requireAuth, async (req, res) => {
   let eloChange: number | null = null;
 
   if (allPassed && match.winnerId === null) {
-    won = true;
-
     const loserId =
       match.player1Id === authReq.userId ? match.player2Id : match.player1Id;
 
-    await db.transaction(async (tx) => {
-      await tx
+    const finish = await db.transaction(async (tx) => {
+      const updated = await tx
         .update(matchesTable)
         .set({
           winnerId: authReq.userId,
@@ -120,7 +119,10 @@ router.post("/", requireAuth, async (req, res) => {
         })
         .where(
           and(eq(matchesTable.id, matchId), isNull(matchesTable.winnerId))
-        );
+        )
+        .returning({ id: matchesTable.id });
+
+      if (updated.length === 0) return null;
 
       const [winnerUser] = await tx
         .select({ elo: usersTable.elo, wins: usersTable.wins })
@@ -140,7 +142,8 @@ router.post("/", requireAuth, async (req, res) => {
             winnerUser.elo,
             loserUser.elo
           );
-          eloChange = winnerNewElo - winnerUser.elo;
+          const winnerEloChange = winnerNewElo - winnerUser.elo;
+          const loserEloChange = loserNewElo - loserUser.elo;
 
           await tx
             .update(usersTable)
@@ -166,6 +169,8 @@ router.post("/", requireAuth, async (req, res) => {
               newElo: loserNewElo,
             },
           ]);
+
+          return { loserId, winnerEloChange, loserEloChange };
         }
       } else if (winnerUser) {
         await tx
@@ -173,12 +178,23 @@ router.post("/", requireAuth, async (req, res) => {
           .set({ wins: winnerUser.wins + 1 })
           .where(eq(usersTable.id, authReq.userId));
       }
+
+      return { loserId: null, winnerEloChange: 0, loserEloChange: 0 };
     });
 
-    io?.to(`match:${matchId}`).emit("match:finished", {
-      winnerId: authReq.userId,
-      eloChange,
-    });
+    if (finish) {
+      won = true;
+      eloChange = finish.winnerEloChange;
+
+      io?.to(`match:${matchId}`).emit("match:finished", {
+        winnerId: authReq.userId,
+        eloChange,
+        eloChanges: {
+          [authReq.userId]: finish.winnerEloChange,
+          ...(finish.loserId ? { [finish.loserId]: finish.loserEloChange } : {}),
+        },
+      });
+    }
   }
 
   res.json({ passed, total, allPassed, won, eloChange, results });

@@ -33,7 +33,7 @@ export function MatchCard({ match }: MatchCardProps) {
               {won ? 'WON' : 'LOST'}
             </div>
             <div className={`text-sm ${eloChange >= 0 ? 'text-success' : 'text-destructive'}`}>
-              {eloChange >= 0 ? '+' : ''}{eloChange} ELO
+              {eloChange >= 0 ? '+' : ''}{eloChange} Rating
             </div>
           </div>
           <div className="text-xs text-muted-foreground text-right w-24">

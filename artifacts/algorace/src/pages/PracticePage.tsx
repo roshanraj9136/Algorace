@@ -29,14 +29,14 @@ export default function PracticePage() {
 
   const { mutate: runPractice, isPending: isRunning } = useRunPractice();
 
-  const [language, setLanguage] = useState<"javascript" | "python">("javascript");
+  const [language, setLanguage] = useState<"cpp" | "java">("cpp");
   const [code, setCode] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("description");
 
   useEffect(() => {
     if (problem) {
-      setCode(language === "javascript" ? problem.starterCodeJs : problem.starterCodePy);
+      setCode(language === "cpp" ? problem.starterCodeCpp : problem.starterCodeJava);
     }
   }, [problem, language]);
 
@@ -104,52 +104,54 @@ export default function PracticePage() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="px-4 border-b rounded-none bg-transparent">
               <TabsTrigger value="description">Description</TabsTrigger>
-              <TabsTrigger value="examples">Examples</TabsTrigger>
               <TabsTrigger value="results">Test Results ({results.filter(r => r.passed).length}/{results.length})</TabsTrigger>
             </TabsList>
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               <TabsContent value="description" className="m-0 space-y-6">
                 <div className="prose prose-invert max-w-none">
-                  <p className="text-lg leading-relaxed">{problem.description}</p>
+                  <p className="text-[15px] leading-relaxed text-foreground/90">{problem.description}</p>
                 </div>
+
+                {problem.examples.map((example, i) => (
+                  <div key={i} className="space-y-2">
+                    <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
+                    <div className="bg-muted/50 rounded-lg border border-border/60 p-4 space-y-2 font-mono text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Input: </span>
+                        <span className="text-foreground">{example.input}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Output: </span>
+                        <span className="text-foreground">{example.output}</span>
+                      </div>
+                      {example.explanation && (
+                        <div className="pt-1 border-t border-border/40">
+                          <span className="text-muted-foreground">Explanation: </span>
+                          <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
                 <div className="space-y-3">
-                  <h3 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">Constraints</h3>
+                  <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                     {problem.constraints.split("\n").map((c, i) => (
-                      <li key={i}>{c}</li>
+                      <li key={i} className="font-mono text-[13px]">{c}</li>
                     ))}
                   </ul>
                 </div>
-                <div className="flex flex-wrap gap-2">
+
+                <div className="flex flex-wrap gap-2 pt-2">
                   {problem.tags.map(tag => (
-                    <span key={tag} className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-muted rounded-full border border-border">
+                    <span key={tag} className="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-muted rounded-full border border-border">
                       {tag}
                     </span>
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="examples" className="m-0 space-y-6">
-                {problem.examples.map((example, i) => (
-                  <div key={i} className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-                    <div className="font-bold text-xs uppercase tracking-widest text-primary">Example {i + 1}</div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <div className="text-[10px] uppercase text-muted-foreground font-bold">Input</div>
-                        <pre className="bg-background p-2 rounded text-xs font-mono">{example.input}</pre>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-[10px] uppercase text-muted-foreground font-bold">Output</div>
-                        <pre className="bg-background p-2 rounded text-xs font-mono">{example.output}</pre>
-                      </div>
-                    </div>
-                    {example.explanation && (
-                      <div className="text-sm text-muted-foreground pt-2 italic border-t border-border/50">
-                        {example.explanation}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </TabsContent>
+
               <TabsContent value="results" className="m-0 space-y-4">
                 {results.length > 0 ? (
                   results.map((res, i) => (
@@ -193,13 +195,13 @@ export default function PracticePage() {
 
         <div className="w-1/2 flex flex-col bg-background">
           <div className="border-b px-4 py-2 flex items-center justify-between bg-card/50">
-            <Select value={language} onValueChange={(val) => setLanguage(val as "javascript" | "python")}>
+            <Select value={language} onValueChange={(val) => setLanguage(val as "cpp" | "java")}>
               <SelectTrigger className="w-32 h-8 text-xs font-bold">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="javascript">JavaScript</SelectItem>
-                <SelectItem value="python">Python</SelectItem>
+                <SelectItem value="cpp">C++</SelectItem>
+                <SelectItem value="java">Java</SelectItem>
               </SelectContent>
             </Select>
             <Button 
@@ -216,7 +218,7 @@ export default function PracticePage() {
           <div className="flex-1 relative">
             <Editor
               height="100%"
-              language={language}
+              language={language === "cpp" ? "cpp" : "java"}
               theme="vs-dark"
               value={code}
               onChange={(val) => setCode(val || "")}

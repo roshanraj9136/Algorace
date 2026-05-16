@@ -36,7 +36,7 @@ export default function DashboardPage() {
         </section>
 
         <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <StatCard title="ELO" value={user?.elo || 0} icon={<Trophy className="text-elo" />} data-testid="stat-elo" />
+          <StatCard title="Rating" value={user?.elo || 0} icon={<Trophy className="text-elo" />} data-testid="stat-elo" />
           <StatCard title="Wins" value={user?.wins || 0} icon={<Flame className="text-success" />} data-testid="stat-wins" />
           <StatCard title="Losses" value={user?.losses || 0} icon={<Swords className="text-destructive" />} data-testid="stat-losses" />
           <StatCard title="Win Rate" value={`${winRate}%`} icon={<Code2 className="text-primary" />} data-testid="stat-winrate" />
@@ -101,7 +101,14 @@ export default function DashboardPage() {
   );
 }
 
-function StatCard({ title, value, icon, "data-testid": testId }: any) {
+interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  "data-testid"?: string;
+}
+
+function StatCard({ title, value, icon, "data-testid": testId }: StatCardProps) {
   return (
     <Card data-testid={testId}>
       <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
@@ -115,7 +122,7 @@ function StatCard({ title, value, icon, "data-testid": testId }: any) {
   );
 }
 
-function History(props: any) {
+function History(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

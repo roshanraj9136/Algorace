@@ -9,6 +9,7 @@ import {
 import { eq, and, or } from "drizzle-orm";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { nanoid } from "nanoid";
+import { getIo } from "./socket-ref";
 
 const router = Router();
 
@@ -111,8 +112,8 @@ router.post("/", requireAuth, async (req, res) => {
       tags: problem!.tags,
       constraints: problem!.constraints,
       examples: problem!.examples,
-      starterCodeJs: problem!.starterCodeJs,
-      starterCodePy: problem!.starterCodePy,
+      starterCodeCpp: problem!.starterCodeCpp,
+      starterCodeJava: problem!.starterCodeJava,
     },
     players: [{ userId: p1!.userId, name: p1!.name, elo: p1!.elo, testsPassedCount: null, totalTests: null, language: null, submittedAt: null }],
     winnerId: null,
@@ -181,8 +182,8 @@ router.get("/:id", requireAuth, async (req, res) => {
           tags: problem.tags,
           constraints: problem.constraints,
           examples: problem.examples,
-          starterCodeJs: problem.starterCodeJs,
-          starterCodePy: problem.starterCodePy,
+          starterCodeCpp: problem.starterCodeCpp,
+          starterCodeJava: problem.starterCodeJava,
         }
       : null,
     players: playerRows.map((p) => ({
@@ -241,6 +242,12 @@ router.post("/join/:code", requireAuth, async (req, res) => {
     userId: authReq.userId,
   });
 
+  const io = getIo();
+  io?.to(`user:${match.player1Id}`).emit("match:player_joined", {
+    matchId: match.id,
+    userId: authReq.userId,
+  });
+
   const [problem] = await db
     .select()
     .from(problemsTable)
@@ -276,8 +283,8 @@ router.post("/join/:code", requireAuth, async (req, res) => {
           tags: problem.tags,
           constraints: problem.constraints,
           examples: problem.examples,
-          starterCodeJs: problem.starterCodeJs,
-          starterCodePy: problem.starterCodePy,
+          starterCodeCpp: problem.starterCodeCpp,
+          starterCodeJava: problem.starterCodeJava,
         }
       : null,
     players: playerRows.map((p) => ({

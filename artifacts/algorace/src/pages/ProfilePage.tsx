@@ -13,7 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/Navbar";
-import { EloBadge } from "@/components/EloBadge";
+import { RatingBadge } from "@/components/RatingBadge";
 import { MatchCard } from "@/components/MatchCard";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -114,7 +114,7 @@ export default function ProfilePage() {
             <div className="flex-1 text-center md:text-left pb-2 space-y-1">
               <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                 <h1 className="text-3xl font-bold" data-testid="text-username">{profile.name}</h1>
-                <EloBadge elo={profile.elo} className="w-fit self-center md:self-auto px-4 py-1" />
+                <RatingBadge rating={profile.elo} className="w-fit self-center md:self-auto px-4 py-1" />
               </div>
               <div className="flex items-center justify-center md:justify-start gap-4 text-muted-foreground text-sm">
                 <span className="flex items-center gap-1">
@@ -175,7 +175,7 @@ export default function ProfilePage() {
           <StatBox title="Wins" value={profile.wins} icon={<Flame className="text-success" />} data-testid="stat-wins" />
           <StatBox title="Losses" value={profile.losses} icon={<Swords className="text-destructive" />} data-testid="stat-losses" />
           <StatBox title="Win Rate" value={`${profile.winRate}%`} icon={<Trophy className="text-elo" />} data-testid="stat-winrate" />
-          <StatBox title="Current ELO" value={profile.elo} icon={<TrendingUp className="text-primary" />} data-testid="stat-elo" />
+          <StatBox title="Current Rating" value={profile.elo} icon={<TrendingUp className="text-primary" />} data-testid="stat-elo" />
         </section>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -183,7 +183,7 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="text-primary" />
-                ELO Progression
+                Rating Progression
               </CardTitle>
               <CardDescription>Your rating history over time</CardDescription>
             </CardHeader>
@@ -211,7 +211,7 @@ export default function ProfilePage() {
                       contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
                       labelStyle={{ color: 'hsl(var(--muted-foreground))' }}
                       itemStyle={{ color: 'hsl(var(--primary))' }}
-                      formatter={(value: any) => [value, "ELO"]}
+                      formatter={(value: number) => [value, "Rating"]}
                       labelFormatter={(label, payload) => payload[0]?.payload?.date || ""}
                     />
                     <Area 
@@ -226,7 +226,7 @@ export default function ProfilePage() {
                 </ResponsiveContainer>
               ) : (
                 <div className="h-full flex items-center justify-center text-muted-foreground">
-                  Play more matches to see your ELO progress
+                  Play more matches to see your rating progress
                 </div>
               )}
             </CardContent>
@@ -255,7 +255,14 @@ export default function ProfilePage() {
   );
 }
 
-function StatBox({ title, value, icon, "data-testid": testId }: any) {
+interface StatBoxProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  "data-testid"?: string;
+}
+
+function StatBox({ title, value, icon, "data-testid": testId }: StatBoxProps) {
   return (
     <Card data-testid={testId}>
       <CardContent className="p-4 flex items-center gap-4">

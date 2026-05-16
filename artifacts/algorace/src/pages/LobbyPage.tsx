@@ -50,10 +50,11 @@ export default function LobbyPage() {
 
   const handleJoinQueue = () => {
     joinQueue(undefined, {
-      onError: (err: any) => {
+      onError: (err: Error | { data?: { error?: string } }) => {
+        const apiError = err as { data?: { error?: string } };
         toast({
           title: "Error",
-          description: err.data?.error || "Failed to join queue",
+          description: apiError.data?.error || "Failed to join queue",
           variant: "destructive",
         });
       }
@@ -69,10 +70,11 @@ export default function LobbyPage() {
       onSuccess: (match) => {
         setLocation(`/race/${match.id}`);
       },
-      onError: (err: any) => {
+      onError: (err: Error | { data?: { error?: string } }) => {
+        const apiError = err as { data?: { error?: string } };
         toast({
           title: "Error",
-          description: err.data?.error || "Failed to create match",
+          description: apiError.data?.error || "Failed to create match",
           variant: "destructive",
         });
       }
@@ -112,7 +114,7 @@ export default function LobbyPage() {
                 <Play className="text-primary w-5 h-5 fill-current" />
                 Quick Play
               </CardTitle>
-              <CardDescription>Match against a random opponent near your ELO</CardDescription>
+              <CardDescription>Match against a random opponent near your rating</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col items-center justify-center py-8">
               {queueStatus?.inQueue ? (
@@ -203,7 +205,7 @@ export default function LobbyPage() {
   );
 }
 
-function History(props: any) {
+function History(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

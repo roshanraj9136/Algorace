@@ -7,7 +7,7 @@ interface DifficultyBadgeProps {
 
 const colors = {
   easy: "bg-success/10 text-success border-success/50",
-  medium: "bg-elo/10 text-elo border-elo/50",
+  medium: "bg-warning/10 text-warning border-warning/50",
   hard: "bg-destructive/10 text-destructive border-destructive/50",
 };
 

@@ -1,6 +1,6 @@
 import { useGetLeaderboard } from "@workspace/api-client-react";
 import { Navbar } from "@/components/Navbar";
-import { EloBadge } from "@/components/EloBadge";
+import { RatingBadge } from "@/components/RatingBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
@@ -15,7 +15,7 @@ export default function LeaderboardPage() {
       <main className="max-w-7xl mx-auto px-4 py-8 space-y-8">
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold tracking-tight">Global Leaderboard</h1>
-          <p className="text-muted-foreground text-lg">The world's fastest coders, ranked by ELO</p>
+          <p className="text-muted-foreground text-lg">The world's fastest coders, ranked by rating</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -31,7 +31,7 @@ export default function LeaderboardPage() {
                 <TableRow>
                   <TableHead className="w-20">Rank</TableHead>
                   <TableHead>Coder</TableHead>
-                  <TableHead>ELO</TableHead>
+                  <TableHead>Rating</TableHead>
                   <TableHead>Matches</TableHead>
                   <TableHead>Wins</TableHead>
                   <TableHead>Losses</TableHead>
@@ -61,7 +61,7 @@ export default function LeaderboardPage() {
                         </Link>
                       </TableCell>
                       <TableCell>
-                        <EloBadge elo={entry.elo} />
+                        <RatingBadge rating={entry.elo} />
                       </TableCell>
                       <TableCell>{entry.totalMatches}</TableCell>
                       <TableCell className="text-success">{entry.wins}</TableCell>
@@ -79,7 +79,15 @@ export default function LeaderboardPage() {
   );
 }
 
-function TopCoderCard({ entry, rank }: { entry: any; rank: number }) {
+type TopCoderEntry = {
+  userId: number;
+  name: string;
+  elo: number;
+  wins: number;
+  winRate: number;
+};
+
+function TopCoderCard({ entry, rank }: { entry: TopCoderEntry; rank: number }) {
   const colors = {
     1: "border-yellow-500 bg-yellow-500/5",
     2: "border-slate-400 bg-slate-400/5",
@@ -109,7 +117,7 @@ function TopCoderCard({ entry, rank }: { entry: any; rank: number }) {
         <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Rank #{rank}</div>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4">
-        <EloBadge elo={entry.elo} className="text-lg py-1 px-3" />
+        <RatingBadge rating={entry.elo} className="text-lg py-1 px-3" />
         <div className="grid grid-cols-2 gap-8 w-full text-center">
           <div>
             <div className="text-2xl font-bold text-success">{entry.wins}</div>

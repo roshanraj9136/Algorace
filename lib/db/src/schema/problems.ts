@@ -13,6 +13,12 @@ export type Example = {
   explanation: string | null;
 };
 
+export type Signature = {
+  fn: string;
+  ret: string;
+  params: { name: string; type: string }[];
+};
+
 export const problemsTable = pgTable("problems", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
@@ -23,8 +29,9 @@ export const problemsTable = pgTable("problems", {
   constraints: text("constraints").notNull(),
   examples: jsonb("examples").notNull().$type<Example[]>(),
   testCases: jsonb("test_cases").notNull().$type<TestCase[]>(),
-  starterCodeJs: text("starter_code_js").notNull(),
-  starterCodePy: text("starter_code_py").notNull(),
+  signature: jsonb("signature").notNull().$type<Signature>(),
+  starterCodeCpp: text("starter_code_cpp").notNull(),
+  starterCodeJava: text("starter_code_java").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 

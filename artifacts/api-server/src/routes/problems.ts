@@ -91,8 +91,8 @@ router.get("/:id", requireAuth, async (req, res) => {
     tags: problem.tags,
     constraints: problem.constraints,
     examples: problem.examples,
-    starterCodeJs: problem.starterCodeJs,
-    starterCodePy: problem.starterCodePy,
+    starterCodeCpp: problem.starterCodeCpp,
+    starterCodeJava: problem.starterCodeJava,
   });
 });
 
@@ -108,8 +108,8 @@ router.post("/:id/run", requireAuth, async (req, res) => {
     code?: string;
   };
 
-  if (!language || !["javascript", "python"].includes(language)) {
-    res.status(400).json({ error: "language must be javascript or python" });
+  if (!language || !["cpp", "java"].includes(language)) {
+    res.status(400).json({ error: "language must be cpp or java" });
     return;
   }
 
@@ -119,7 +119,7 @@ router.post("/:id/run", requireAuth, async (req, res) => {
   }
 
   const [problem] = await db
-    .select({ testCases: problemsTable.testCases })
+    .select({ testCases: problemsTable.testCases, signature: problemsTable.signature })
     .from(problemsTable)
     .where(eq(problemsTable.id, id))
     .limit(1);
@@ -131,9 +131,10 @@ router.post("/:id/run", requireAuth, async (req, res) => {
 
   const visibleCases = problem.testCases.slice(0, 3);
   const results = await runTestCases(
-    language as "javascript" | "python",
+    language as "cpp" | "java",
     code,
-    visibleCases
+    visibleCases,
+    problem.signature
   );
 
   const passed = results.filter((r) => r.passed).length;

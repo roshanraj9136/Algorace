@@ -4,8 +4,9 @@ import { verifyToken } from "../lib/jwt";
 import { setIo } from "../routes/socket-ref";
 import { removeUserFromQueue } from "./matchmaking";
 import { startDisconnectGrace, cancelDisconnectGrace } from "./disconnect";
+import { getCorsOrigin } from "../lib/env";
 
-const corsOrigin = process.env["CORS_ORIGIN"] || "*";
+const corsOrigin = getCorsOrigin();
 
 export function createSocketServer(httpServer: HttpServer): SocketServer {
   const io = new SocketServer(httpServer, {

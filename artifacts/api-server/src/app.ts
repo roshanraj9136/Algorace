@@ -3,10 +3,11 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
+import { getCorsOrigin } from "./lib/env";
 
 const app: Express = express();
 
-const corsOrigin = process.env["CORS_ORIGIN"] || "*";
+const corsOrigin = getCorsOrigin();
 
 app.use(
   pinoHttp({
@@ -32,5 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  logger.error({ err, reqId: req.id }, "Unhandled API Error");
+  res.status(500).json({ error: "Internal Server Error" });
+});
 
 export default app;

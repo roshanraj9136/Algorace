@@ -3,9 +3,15 @@ import { problemsTable } from "@workspace/db/schema";
 import { problems } from "./problems-data";
 
 async function seed() {
-  console.log(`Seeding ${problems.length} problems...`);
+  console.log(`Saving ${problems.length} problems...`);
   for (const problem of problems) {
-    await db.insert(problemsTable).values(problem).onConflictDoNothing();
+    await db
+      .insert(problemsTable)
+      .values(problem)
+      .onConflictDoUpdate({
+        target: problemsTable.slug,
+        set: problem,
+      });
   }
   console.log("Seed complete.");
   process.exit(0);

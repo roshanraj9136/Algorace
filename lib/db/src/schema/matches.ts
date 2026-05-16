@@ -33,7 +33,7 @@ export const matchPlayersTable = pgTable("match_players", {
   userId: integer("user_id")
     .notNull()
     .references(() => usersTable.id),
-  language: text("language", { enum: ["javascript", "python"] }),
+  language: text("language", { enum: ["cpp", "java"] }),
   finalCode: text("final_code"),
   testsPassedCount: integer("tests_passed_count"),
   totalTests: integer("total_tests"),

@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { EloBadge } from "./EloBadge";
+import { RatingBadge } from "./RatingBadge";
 import { LogOut, Trophy, LayoutDashboard, Code2, Users } from "lucide-react";
 
 export function Navbar() {
@@ -37,7 +37,7 @@ export function Navbar() {
             <>
               <Link href={`/profile/${user.id}`} className="flex items-center gap-2 hover:opacity-80" data-testid="link-profile">
                 <span className="text-sm font-medium hidden sm:inline">{user.name}</span>
-                <EloBadge elo={user.elo} />
+                <RatingBadge rating={user.elo} />
               </Link>
               <Button 
                 variant="ghost" 

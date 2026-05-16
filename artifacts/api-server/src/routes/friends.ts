@@ -489,8 +489,8 @@ router.post("/:userId/challenge", requireAuth, async (req, res) => {
       tags: problem!.tags,
       constraints: problem!.constraints,
       examples: problem!.examples,
-      starterCodeJs: problem!.starterCodeJs,
-      starterCodePy: problem!.starterCodePy,
+      starterCodeCpp: problem!.starterCodeCpp,
+      starterCodeJava: problem!.starterCodeJava,
     },
     players: [
       {

@@ -87,16 +87,16 @@ export interface Problem {
   tags: string[];
   constraints: string;
   examples: ProblemExample[];
-  starterCodeJs: string;
-  starterCodePy: string;
+  starterCodeCpp: string;
+  starterCodeJava: string;
 }
 
 export type RunCodeBodyLanguage =
   (typeof RunCodeBodyLanguage)[keyof typeof RunCodeBodyLanguage];
 
 export const RunCodeBodyLanguage = {
-  javascript: "javascript",
-  python: "python",
+  cpp: "cpp",
+  java: "java",
 } as const;
 
 export interface RunCodeBody {
@@ -186,8 +186,8 @@ export type SubmitCodeBodyLanguage =
   (typeof SubmitCodeBodyLanguage)[keyof typeof SubmitCodeBodyLanguage];
 
 export const SubmitCodeBodyLanguage = {
-  javascript: "javascript",
-  python: "python",
+  cpp: "cpp",
+  java: "java",
 } as const;
 
 export interface SubmitCodeBody {

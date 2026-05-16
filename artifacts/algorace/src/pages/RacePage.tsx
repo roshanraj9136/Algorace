@@ -40,17 +40,35 @@ export default function RacePage() {
 
   const { mutate: submitCode, isPending: isSubmitting } = useSubmitCode();
 
-  const [language, setLanguage] = useState<"javascript" | "python">("javascript");
+interface TestCaseResult {
+  passed: boolean;
+  expectedOutput: string;
+  actualOutput: string;
+  error: string | null;
+}
+
+interface OpponentProgress {
+  userId: number;
+  testsPassedCount: number;
+}
+
+interface WinnerData {
+  winnerId: number;
+  eloChange: number;
+  reason?: string;
+}
+
+  const [language, setLanguage] = useState<"cpp" | "java">("cpp");
   const [code, setCode] = useState("");
-  const [results, setResults] = useState<any[]>([]);
-  const [opponentProgress, setOpponentProgress] = useState<any>(null);
+  const [results, setResults] = useState<TestCaseResult[]>([]);
+  const [opponentProgress, setOpponentProgress] = useState<OpponentProgress | null>(null);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
-  const [winnerData, setWinnerData] = useState<any>(null);
+  const [winnerData, setWinnerData] = useState<WinnerData | null>(null);
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     if (match?.problem) {
-      setCode(language === "javascript" ? match.problem.starterCodeJs : match.problem.starterCodePy);
+      setCode(language === "cpp" ? match.problem.starterCodeCpp : match.problem.starterCodeJava);
     }
   }, [match?.problem, language]);
 
@@ -66,7 +84,8 @@ export default function RacePage() {
     });
 
     socket.on("match:finished", (data) => {
-      setWinnerData(data);
+      const change = data.eloChanges?.[String(user?.id)] ?? data.eloChange ?? 0;
+      setWinnerData({ ...data, eloChange: change });
       setShowWinnerModal(true);
       refetch();
     });
@@ -80,16 +99,25 @@ export default function RacePage() {
       setLocation("/lobby");
     });
 
+    socket.on("match:player_joined", () => {
+      toast({
+        title: "Opponent Joined!",
+        description: "The race is starting now!",
+      });
+      refetch();
+    });
+
     return () => {
       socket.emit("match:leave", { matchId });
       socket.off("match:progress");
       socket.off("match:finished");
       socket.off("match:abandoned");
+      socket.off("match:player_joined");
     };
   }, [socket, matchId, user?.id, refetch, setLocation, toast]);
 
   useEffect(() => {
-    let interval: any;
+    let interval: ReturnType<typeof setInterval>;
     if (match?.status === "active" && match.startedAt) {
       const start = new Date(match.startedAt).getTime();
       interval = setInterval(() => {
@@ -202,45 +230,46 @@ export default function RacePage() {
           <Tabs defaultValue="description" className="flex-1 flex flex-col">
             <TabsList className="px-4 border-b rounded-none bg-transparent">
               <TabsTrigger value="description">Description</TabsTrigger>
-              <TabsTrigger value="examples">Examples</TabsTrigger>
               <TabsTrigger value="results">Test Results ({results.filter(r => r.passed).length}/{results.length})</TabsTrigger>
             </TabsList>
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               <TabsContent value="description" className="m-0 space-y-6">
                 <div className="prose prose-invert max-w-none">
-                  <p className="text-lg leading-relaxed">{match.problem.description}</p>
+                  <p className="text-[15px] leading-relaxed text-foreground/90">{match.problem.description}</p>
                 </div>
+
+                {match.problem.examples.map((example, i) => (
+                  <div key={i} className="space-y-2">
+                    <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
+                    <div className="bg-muted/50 rounded-lg border border-border/60 p-4 space-y-2 font-mono text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Input: </span>
+                        <span className="text-foreground">{example.input}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Output: </span>
+                        <span className="text-foreground">{example.output}</span>
+                      </div>
+                      {example.explanation && (
+                        <div className="pt-1 border-t border-border/40">
+                          <span className="text-muted-foreground">Explanation: </span>
+                          <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
                 <div className="space-y-3">
-                  <h3 className="font-bold text-sm uppercase tracking-widest text-muted-foreground">Constraints</h3>
+                  <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
                   <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
                     {match.problem.constraints.split("\n").map((c, i) => (
-                      <li key={i}>{c}</li>
+                      <li key={i} className="font-mono text-[13px]">{c}</li>
                     ))}
                   </ul>
                 </div>
               </TabsContent>
-              <TabsContent value="examples" className="m-0 space-y-6">
-                {match.problem.examples.map((example, i) => (
-                  <div key={i} className="space-y-3 p-4 bg-muted/50 rounded-lg border">
-                    <div className="font-bold text-xs uppercase tracking-widest text-primary">Example {i + 1}</div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <div className="text-[10px] uppercase text-muted-foreground font-bold">Input</div>
-                        <pre className="bg-background p-2 rounded text-xs font-mono">{example.input}</pre>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-[10px] uppercase text-muted-foreground font-bold">Output</div>
-                        <pre className="bg-background p-2 rounded text-xs font-mono">{example.output}</pre>
-                      </div>
-                    </div>
-                    {example.explanation && (
-                      <div className="text-sm text-muted-foreground pt-2 italic border-t border-border/50">
-                        {example.explanation}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </TabsContent>
+
               <TabsContent value="results" className="m-0 space-y-4">
                 {results.length > 0 ? (
                   results.map((res, i) => (
@@ -284,13 +313,13 @@ export default function RacePage() {
 
         <div className="w-1/2 flex flex-col bg-background">
           <div className="border-b px-4 py-2 flex items-center justify-between bg-card/50">
-            <Select value={language} onValueChange={(val) => setLanguage(val as "javascript" | "python")}>
+            <Select value={language} onValueChange={(val) => setLanguage(val as "cpp" | "java")}>
               <SelectTrigger className="w-32 h-8 text-xs font-bold">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="javascript">JavaScript</SelectItem>
-                <SelectItem value="python">Python</SelectItem>
+                <SelectItem value="cpp">C++</SelectItem>
+                <SelectItem value="java">Java</SelectItem>
               </SelectContent>
             </Select>
             <div className="flex items-center gap-2">
@@ -309,7 +338,7 @@ export default function RacePage() {
           <div className="flex-1 relative">
             <Editor
               height="100%"
-              language={language}
+              language={language === "cpp" ? "cpp" : "java"}
               theme="vs-dark"
               value={code}
               onChange={(val) => setCode(val || "")}
@@ -346,9 +375,9 @@ export default function RacePage() {
           </DialogHeader>
           <div className="py-6 flex justify-center gap-12">
             <div className="text-center">
-              <div className="text-sm uppercase tracking-widest text-muted-foreground mb-1">ELO Change</div>
-              <div className={`text-4xl font-black ${winnerData?.eloChange >= 0 ? 'text-success' : 'text-destructive'}`}>
-                {winnerData?.eloChange >= 0 ? '+' : ''}{winnerData?.eloChange}
+              <div className="text-sm uppercase tracking-widest text-muted-foreground mb-1">Rating Change</div>
+              <div className={`text-4xl font-black ${(winnerData?.eloChange ?? 0) >= 0 ? 'text-success' : 'text-destructive'}`}>
+                {(winnerData?.eloChange ?? 0) >= 0 ? '+' : ''}{winnerData?.eloChange ?? 0}
               </div>
             </div>
           </div>

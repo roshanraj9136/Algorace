@@ -805,9 +805,9 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ProblemExample"
-        starterCodeJs:
+        starterCodeCpp:
           type: string
-        starterCodePy:
+        starterCodeJava:
           type: string
       required:
         - id
@@ -818,15 +818,15 @@ components:
         - tags
         - constraints
         - examples
-        - starterCodeJs
-        - starterCodePy
+        - starterCodeCpp
+        - starterCodeJava
 
     RunCodeBody:
       type: object
       properties:
         language:
           type: string
-          enum: [javascript, python]
+          enum: [cpp, java]
         code:
           type: string
       required:
@@ -982,7 +982,7 @@ components:
           type: integer
         language:
           type: string
-          enum: [javascript, python]
+          enum: [cpp, java]
         code:
           type: string
       required:

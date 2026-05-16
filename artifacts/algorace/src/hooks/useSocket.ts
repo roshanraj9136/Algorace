@@ -1,27 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { TOKEN_KEY } from "./useAuth";
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
 export function useSocket() {
-  const socketRef = useRef<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return;
 
-    const socket = io(API_URL, {
+    const nextSocket = io(API_URL, {
       path: "/ws",
       auth: { token },
     });
 
-    socketRef.current = socket;
+    setSocket(nextSocket);
 
     return () => {
-      socket.disconnect();
+      nextSocket.disconnect();
+      setSocket(null);
     };
   }, []);
 
-  return socketRef.current;
+  return socket;
 }

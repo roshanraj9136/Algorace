@@ -112,6 +112,8 @@ async function awardOpponentWin(
       winnerUser.elo,
       loserUser.elo
     );
+    const winnerEloChange = winnerNewElo - winnerUser.elo;
+    const loserEloChange = loserNewElo - loserUser.elo;
 
     await tx
       .update(usersTable)
@@ -141,6 +143,11 @@ async function awardOpponentWin(
     const io = getIo();
     io?.to(`match:${matchId}`).emit("match:finished", {
       winnerId,
+      eloChange: winnerEloChange,
+      eloChanges: {
+        [winnerId]: winnerEloChange,
+        [loserId]: loserEloChange,
+      },
       reason: "opponent_disconnected",
     });
   });

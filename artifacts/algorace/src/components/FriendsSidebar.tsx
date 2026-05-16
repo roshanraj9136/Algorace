@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { ToastAction } from "@/components/ui/toast";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { EloBadge } from "./EloBadge";
+import { RatingBadge } from "./RatingBadge";
 import {
   UserPlus,
   Users,
@@ -298,7 +298,7 @@ export function FriendsSidebar() {
                     <p className="text-sm font-semibold truncate">{u.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{u.email}</p>
                   </div>
-                  <EloBadge elo={u.elo} className="text-xs" />
+                  <RatingBadge rating={u.elo} className="text-xs" />
                   {u.relationship === "none" && (
                     <Button
                       size="sm"
@@ -400,7 +400,7 @@ export function FriendsSidebar() {
                   >
                     {friend.name}
                   </Link>
-                  <EloBadge elo={friend.elo} className="text-[10px] py-0 px-1.5" />
+                  <RatingBadge rating={friend.elo} className="text-[10px] py-0 px-1.5" />
                 </div>
                 <Button
                   size="icon"
