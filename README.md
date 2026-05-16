@@ -1,68 +1,70 @@
 # AlgoRace
 
-AlgoRace is a real-time competitive programming platform built for head-to-head coding races. It brings together authentication, live matchmaking, problem practice, race rooms, submissions, ratings, leaderboards, and player profiles into one full-stack application.
+AlgoRace is a coding race app. You log in, pick a problem, race another player, submit code, and watch the match move in real time.
 
-Live app: https://algorace-omega.vercel.app  
-API service: https://algorace-api-lum7.onrender.com
+It is live here:
 
-## What Makes It Special
+**App:** https://algorace-omega.vercel.app  
+**API:** https://algorace-api-lum7.onrender.com
 
-AlgoRace is more than a static coding dashboard. It is a production-style system with a React frontend, an Express API, PostgreSQL persistence, JWT authentication, WebSocket-based race updates, seeded problem data, and deployment across Vercel and Render.
+## Why I Built This
 
-Getting it production-ready required solving the parts that usually make full-stack projects difficult: monorepo builds, environment variables across different platforms, API routing, CORS, database provisioning, deployment outputs, and frontend builds that must point to the correct hosted backend. The final deployment now connects the Vercel frontend to the Render API cleanly.
+I wanted AlgoRace to feel closer to an actual competitive coding arena than a normal practice page. Not just "solve a problem and see a result", but a proper race flow with users, ratings, matchmaking, live updates, match history, and a backend that actually runs outside my laptop.
 
-## Features
+The hard part was not only building the screens. The tough part was making the whole thing behave like one real product:
 
-- User registration and login
-- JWT-protected API routes
-- Competitive race lobby
-- Real-time socket updates
-- Practice problems and submissions
-- Match history and rating tracking
-- Leaderboard and user profiles
-- PostgreSQL database schema managed with Drizzle
-- Production deployment on Vercel and Render
+- frontend on Vercel
+- API on Render
+- PostgreSQL database
+- JWT auth
+- Socket.IO for live race state
+- Drizzle schema and seeded problems
+- CORS and production env vars wired correctly
+- Vite build pointing to the real hosted API, not localhost
 
-## Tech Stack
+That deployment fight was honestly a big part of the project. Getting the Vercel app and Render API to finally talk to each other cleanly was the moment it started feeling real.
 
-- React, Vite, TypeScript
-- Express and Socket.IO
-- PostgreSQL with Drizzle ORM
+## What It Has
+
+- Register and login
+- Protected user sessions
+- Dashboard with player stats
+- Problem list and practice mode
+- Race lobby
+- Real-time match updates
+- Code submissions
+- Ratings, wins, losses, and match history
+- Leaderboard
+- User profiles
+- Friends and challenges
+
+## Stack
+
+Frontend:
+
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
 - TanStack Query
-- Tailwind CSS and shadcn-style UI components
+- shadcn-style components
+
+Backend:
+
+- Express
+- Socket.IO
+- PostgreSQL
+- Drizzle ORM
+- JWT auth
+- bcrypt password hashing
+
+Deployment:
+
 - Vercel for the frontend
-- Render for the API service
+- Render for the API
+- Neon/Postgres-compatible database setup
 
-## Deployment
-
-The production frontend is hosted on Vercel:
-
-```text
-https://algorace-omega.vercel.app
-```
-
-The production API is hosted on Render:
-
-```text
-https://algorace-api-lum7.onrender.com
-```
-
-The Vercel production environment uses:
-
-```text
-VITE_API_URL=https://algorace-api-lum7.onrender.com
-```
-
-The Render API expects:
-
-```text
-DATABASE_URL
-JWT_SECRET
-CORS_ORIGIN=https://algorace-omega.vercel.app
-NODE_ENV=production
-```
-
-## Local Development
+## Running Locally
 
 Install dependencies:
 
@@ -70,24 +72,30 @@ Install dependencies:
 pnpm install
 ```
 
-Run the API:
+Start the API:
 
 ```bash
 pnpm --filter @workspace/api-server run dev
 ```
 
-Run the frontend:
+Start the app:
 
 ```bash
 pnpm --filter @workspace/algorace run dev
 ```
 
-The local frontend expects `VITE_API_URL` to point at the API server, usually:
+For local frontend development, use:
 
 ```text
 VITE_API_URL=http://localhost:8080
 ```
 
-## Status
+For production, Vercel uses:
 
-AlgoRace is live and connected end to end: the Vercel frontend now talks to the correct Render backend, and the API responds with the expected authenticated JSON responses.
+```text
+VITE_API_URL=https://algorace-api-lum7.onrender.com
+```
+
+## Current Status
+
+AlgoRace is deployed and working end to end. The frontend is live on Vercel, the API is live on Render, login works, and the production app is connected to the correct backend.
