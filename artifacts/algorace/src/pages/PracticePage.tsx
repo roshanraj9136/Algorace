@@ -33,6 +33,7 @@ export default function PracticePage() {
   const [code, setCode] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("description");
+  const [mobileTab, setMobileTab] = useState<"problem" | "code" | "results">("code");
 
   useEffect(() => {
     if (problem) {
@@ -51,6 +52,7 @@ export default function PracticePage() {
       onSuccess: (res) => {
         setResults(res.results);
         setActiveTab("results");
+        setMobileTab("results");
         if (res.passed === res.total) {
           toast({
             title: "Success!",
@@ -77,29 +79,120 @@ export default function PracticePage() {
 
   if (!problem) return null;
 
+  // Shared problem description content
+  const ProblemContent = () => (
+    <div className="space-y-6">
+      <div className="prose prose-invert max-w-none">
+        <p className="text-[15px] leading-relaxed text-foreground/90">{problem.description}</p>
+      </div>
+
+      {problem.examples.map((example, i) => (
+        <div key={i} className="space-y-2">
+          <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
+          <div className="bg-muted/50 rounded-lg border border-border/60 p-3 sm:p-4 space-y-2 font-mono text-xs sm:text-sm">
+            <div className="break-all">
+              <span className="text-muted-foreground">Input: </span>
+              <span className="text-foreground">{example.input}</span>
+            </div>
+            <div className="break-all">
+              <span className="text-muted-foreground">Output: </span>
+              <span className="text-foreground">{example.output}</span>
+            </div>
+            {example.explanation && (
+              <div className="pt-1 border-t border-border/40">
+                <span className="text-muted-foreground">Explanation: </span>
+                <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+
+      <div className="space-y-3">
+        <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          {problem.constraints.split("\n").map((c, i) => (
+            <li key={i} className="font-mono text-[13px]">{c}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="flex flex-wrap gap-2 pt-2">
+        {problem.tags.map(tag => (
+          <span key={tag} className="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-muted rounded-full border border-border">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Shared test results content
+  const ResultsContent = () => (
+    <div className="space-y-4">
+      {results.length > 0 ? (
+        results.map((res, i) => (
+          <div key={i} className={`p-3 sm:p-4 rounded-lg border ${res.passed ? 'bg-success/5 border-success/20' : 'bg-destructive/5 border-destructive/20'}`}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 font-bold text-sm">
+                {res.passed ? <CheckCircle2 className="text-success w-4 h-4" /> : <XCircle className="text-destructive w-4 h-4" />}
+                Test Case {i + 1}
+              </div>
+              <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${res.passed ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
+                {res.passed ? 'Passed' : 'Failed'}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+              <div className="space-y-1">
+                <div className="text-muted-foreground">Expected</div>
+                <pre className="bg-background p-2 rounded overflow-x-auto">{res.expectedOutput}</pre>
+              </div>
+              <div className="space-y-1">
+                <div className="text-muted-foreground">Actual</div>
+                <pre className="bg-background p-2 rounded overflow-x-auto">{res.actualOutput}</pre>
+              </div>
+            </div>
+            {res.error && (
+              <div className="mt-3 p-2 bg-destructive/10 text-destructive rounded text-xs font-mono whitespace-pre-wrap break-all">
+                {res.error}
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <div className="h-40 sm:h-64 flex flex-col items-center justify-center text-muted-foreground gap-2 border border-dashed rounded-lg">
+          <Play className="w-8 h-8 opacity-20" />
+          Run your code to see results
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="h-screen flex flex-col bg-background">
-      <div className="border-b bg-card px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => setLocation("/problems")} data-testid="button-back">
-            Back to Bank
+      {/* Header Bar */}
+      <div className="border-b bg-card px-3 sm:px-4 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <Button variant="ghost" size="sm" onClick={() => setLocation("/problems")} data-testid="button-back" className="shrink-0 text-xs sm:text-sm">
+            Back
           </Button>
-          <div className="h-6 w-px bg-border" />
-          <h1 className="font-bold flex items-center gap-2">
-            <span className="text-muted-foreground font-mono mr-1">#{problem.id}</span>
-            {problem.title}
+          <div className="h-6 w-px bg-border hidden sm:block" />
+          <h1 className="font-bold flex items-center gap-2 text-sm sm:text-base truncate">
+            <span className="text-muted-foreground font-mono mr-1 hidden sm:inline">#{problem.id}</span>
+            <span className="truncate">{problem.title}</span>
             <DifficultyBadge difficulty={problem.difficulty} />
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
-            <Code2 className="w-4 h-4 text-primary" />
-            <span className="text-xs font-bold text-primary">PRACTICE MODE</span>
+          <div className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+            <Code2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+            <span className="text-[10px] sm:text-xs font-bold text-primary">PRACTICE</span>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
+      {/* ===== DESKTOP LAYOUT (md+) ===== */}
+      <div className="flex-1 hidden md:flex overflow-hidden">
         <div className="w-1/2 border-r flex flex-col overflow-hidden bg-card/30">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="px-4 border-b rounded-none bg-transparent">
@@ -107,87 +200,11 @@ export default function PracticePage() {
               <TabsTrigger value="results">Test Results ({results.filter(r => r.passed).length}/{results.length})</TabsTrigger>
             </TabsList>
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              <TabsContent value="description" className="m-0 space-y-6">
-                <div className="prose prose-invert max-w-none">
-                  <p className="text-[15px] leading-relaxed text-foreground/90">{problem.description}</p>
-                </div>
-
-                {problem.examples.map((example, i) => (
-                  <div key={i} className="space-y-2">
-                    <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
-                    <div className="bg-muted/50 rounded-lg border border-border/60 p-4 space-y-2 font-mono text-sm">
-                      <div>
-                        <span className="text-muted-foreground">Input: </span>
-                        <span className="text-foreground">{example.input}</span>
-                      </div>
-                      <div>
-                        <span className="text-muted-foreground">Output: </span>
-                        <span className="text-foreground">{example.output}</span>
-                      </div>
-                      {example.explanation && (
-                        <div className="pt-1 border-t border-border/40">
-                          <span className="text-muted-foreground">Explanation: </span>
-                          <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
-                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                    {problem.constraints.split("\n").map((c, i) => (
-                      <li key={i} className="font-mono text-[13px]">{c}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {problem.tags.map(tag => (
-                    <span key={tag} className="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-muted rounded-full border border-border">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              <TabsContent value="description" className="m-0">
+                <ProblemContent />
               </TabsContent>
-
-              <TabsContent value="results" className="m-0 space-y-4">
-                {results.length > 0 ? (
-                  results.map((res, i) => (
-                    <div key={i} className={`p-4 rounded-lg border ${res.passed ? 'bg-success/5 border-success/20' : 'bg-destructive/5 border-destructive/20'}`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2 font-bold">
-                          {res.passed ? <CheckCircle2 className="text-success w-4 h-4" /> : <XCircle className="text-destructive w-4 h-4" />}
-                          Test Case {i + 1}
-                        </div>
-                        <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${res.passed ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
-                          {res.passed ? 'Passed' : 'Failed'}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                        <div className="space-y-1">
-                          <div className="text-muted-foreground">Expected</div>
-                          <pre className="bg-background p-2 rounded truncate">{res.expectedOutput}</pre>
-                        </div>
-                        <div className="space-y-1">
-                          <div className="text-muted-foreground">Actual</div>
-                          <pre className="bg-background p-2 rounded truncate">{res.actualOutput}</pre>
-                        </div>
-                      </div>
-                      {res.error && (
-                        <div className="mt-3 p-2 bg-destructive/10 text-destructive rounded text-xs font-mono whitespace-pre-wrap">
-                          {res.error}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <div className="h-64 flex flex-col items-center justify-center text-muted-foreground gap-2 border border-dashed rounded-lg">
-                    <Play className="w-8 h-8 opacity-20" />
-                    Run your code to see results
-                  </div>
-                )}
+              <TabsContent value="results" className="m-0">
+                <ResultsContent />
               </TabsContent>
             </div>
           </Tabs>
@@ -234,6 +251,89 @@ export default function PracticePage() {
             />
           </div>
         </div>
+      </div>
+
+      {/* ===== MOBILE LAYOUT (below md) ===== */}
+      <div className="flex-1 flex flex-col md:hidden overflow-hidden">
+        {/* Mobile Tab Bar */}
+        <div className="border-b bg-card/50 flex">
+          <button
+            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'problem' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
+            onClick={() => setMobileTab('problem')}
+          >
+            Problem
+          </button>
+          <button
+            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'code' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
+            onClick={() => setMobileTab('code')}
+          >
+            Code
+          </button>
+          <button
+            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'results' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
+            onClick={() => setMobileTab('results')}
+          >
+            Results ({results.filter(r => r.passed).length}/{results.length})
+          </button>
+        </div>
+
+        {/* Mobile Content */}
+        {mobileTab === 'problem' && (
+          <div className="flex-1 overflow-y-auto p-4">
+            <ProblemContent />
+          </div>
+        )}
+
+        {mobileTab === 'code' && (
+          <div className="flex-1 flex flex-col">
+            <div className="border-b px-3 py-2 flex items-center justify-between bg-card/50">
+              <Select value={language} onValueChange={(val) => setLanguage(val as "cpp" | "java")}>
+                <SelectTrigger className="w-24 h-8 text-xs font-bold">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="cpp">C++</SelectItem>
+                  <SelectItem value="java">Java</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button 
+                size="sm" 
+                className="font-bold gap-1.5 text-xs" 
+                onClick={handleRun} 
+                disabled={isRunning}
+                data-testid="button-run-mobile"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                RUN
+              </Button>
+            </div>
+            <div className="flex-1 relative min-h-0">
+              <Editor
+                height="100%"
+                language={language === "cpp" ? "cpp" : "java"}
+                theme="vs-dark"
+                value={code}
+                onChange={(val) => setCode(val || "")}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 13,
+                  fontFamily: "var(--font-mono)",
+                  lineNumbers: "on",
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true,
+                  padding: { top: 12, bottom: 12 },
+                  wordWrap: "on",
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {mobileTab === 'results' && (
+          <div className="flex-1 overflow-y-auto p-4">
+            <ResultsContent />
+          </div>
+        )}
       </div>
     </div>
   );

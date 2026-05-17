@@ -101,13 +101,13 @@ export default function LobbyPage() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="max-w-7xl mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">Race Lobby</h1>
-          <p className="text-muted-foreground text-lg">Choose your game mode and start competing</p>
+      <main className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2">Race Lobby</h1>
+          <p className="text-muted-foreground text-sm sm:text-lg">Choose your game mode and start competing</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
           <Card className="flex flex-col border-primary/20 bg-primary/5" data-testid="panel-quick-play">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
