@@ -34,7 +34,8 @@ router.get("/", requireAuth, async (req, res) => {
       difficulty: problemsTable.difficulty,
       tags: problemsTable.tags,
     })
-    .from(problemsTable);
+    .from(problemsTable)
+    .orderBy(problemsTable.id);
 
   const results = conditions.length
     ? await baseQuery.where(and(...conditions))
