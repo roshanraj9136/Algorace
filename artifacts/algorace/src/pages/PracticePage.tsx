@@ -79,27 +79,26 @@ export default function PracticePage() {
 
   if (!problem) return null;
 
-  // Shared problem description content
   const ProblemContent = () => (
     <div className="space-y-6">
-      <div className="prose prose-invert max-w-none">
+      <div className="prose prose-invert max-w-none break-words">
         <p className="text-[15px] leading-relaxed text-foreground/90">{problem.description}</p>
       </div>
 
       {problem.examples.map((example, i) => (
-        <div key={i} className="space-y-2">
+        <div key={i} className="space-y-2 max-w-full min-w-0">
           <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
-          <div className="bg-muted/50 rounded-lg border border-border/60 p-3 sm:p-4 space-y-2 font-mono text-xs sm:text-sm">
-            <div className="break-all">
+          <div className="bg-muted/50 rounded-lg border border-border/60 p-3 sm:p-4 space-y-2 font-mono text-xs sm:text-sm overflow-x-auto">
+            <div className="whitespace-pre">
               <span className="text-muted-foreground">Input: </span>
               <span className="text-foreground">{example.input}</span>
             </div>
-            <div className="break-all">
+            <div className="whitespace-pre">
               <span className="text-muted-foreground">Output: </span>
               <span className="text-foreground">{example.output}</span>
             </div>
             {example.explanation && (
-              <div className="pt-1 border-t border-border/40">
+              <div className="pt-2 mt-2 border-t border-border/40 whitespace-normal">
                 <span className="text-muted-foreground">Explanation: </span>
                 <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
               </div>
@@ -108,11 +107,11 @@ export default function PracticePage() {
         </div>
       ))}
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-w-full">
         <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
         <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
           {problem.constraints.split("\n").map((c, i) => (
-            <li key={i} className="font-mono text-[13px]">{c}</li>
+            <li key={i} className="font-mono text-[13px] break-words whitespace-pre-wrap">{c}</li>
           ))}
         </ul>
       </div>
@@ -142,14 +141,14 @@ export default function PracticePage() {
                 {res.passed ? 'Passed' : 'Failed'}
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-              <div className="space-y-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono w-full">
+              <div className="space-y-1 min-w-0">
                 <div className="text-muted-foreground">Expected</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto">{res.expectedOutput}</pre>
+                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto whitespace-pre">{res.expectedOutput}</pre>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1 min-w-0">
                 <div className="text-muted-foreground">Actual</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto">{res.actualOutput}</pre>
+                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto whitespace-pre">{res.actualOutput}</pre>
               </div>
             </div>
             {res.error && (
