@@ -240,15 +240,15 @@ interface WinnerData {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
               <div className="space-y-1">
                 <div className="text-muted-foreground">Expected</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto">{res.expectedOutput}</pre>
+                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto">{res.expectedOutput}</pre>
               </div>
               <div className="space-y-1">
                 <div className="text-muted-foreground">Actual</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto">{res.actualOutput}</pre>
+                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto">{res.actualOutput}</pre>
               </div>
             </div>
             {res.error && (
-              <div className="mt-3 p-2 bg-destructive/10 text-destructive rounded text-xs font-mono whitespace-pre-wrap break-all">
+              <div className="mt-3 p-2 bg-destructive/10 text-destructive rounded text-xs font-mono whitespace-pre-wrap break-all max-h-48 overflow-y-auto">
                 {res.error}
               </div>
             )}
