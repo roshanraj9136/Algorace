@@ -224,7 +224,12 @@ export const problems: Problem[] = [
     ["[4,3,2,1]", "[4,3,2,2]", "The array represents the integer 4321. Incrementing gives 4322."],
     ["[9]", "[1,0]"],
     ["[9,9]", "[1,0,0]"],
-    ["[0]", "[1]"]
+    ["[0]", "[1]"],
+    ["[4,3,2,1]", "[4,3,2,2]"],
+    ["[5,5]", "[5,6]"],
+    ["[2,9]", "[3,0]"],
+    ["[7]", "[8]"],
+    ["[9,9,9,9]", "[1,0,0,0,0]"]
   ]),
   p("Merge Sorted Array", "easy", ["array","two pointers"], {fn:"merge",ret:"int[]",params:[{name:"nums1",type:"int[]"},{name:"nums2",type:"int[]"}]},
     "Given two integer arrays nums1 and nums2, both sorted in non-decreasing order, merge them into a single sorted array and return it. The final array should also be sorted in non-decreasing order and contain all elements from both input arrays.",
@@ -249,7 +254,12 @@ export const problems: Problem[] = [
     ["\"LVIII\"", "58", "L = 50, V = 5, III = 3. Total = 58."],
     ["\"MCMXCIV\"", "1994"],
     ["\"IV\"", "4"],
-    ["\"IX\"", "9"]
+    ["\"IX\"", "9"],
+    ["\"XL\"", "40"],
+    ["\"XC\"", "90"],
+    ["\"CD\"", "400"],
+    ["\"CM\"", "900"],
+    ["\"MMMDCCXLIX\"", "3749"]
   ]),
   p("Length of Last Word", "easy", ["string"], {fn:"lengthOfLastWord",ret:"int",params:[{name:"s",type:"string"}]},
     "Given a string s consisting of words separated by spaces, return the length of the last word in the string. A word is a maximal substring consisting of non-space characters only. Trailing spaces should be ignored.",
@@ -264,6 +274,11 @@ export const problems: Problem[] = [
     ["\"  space  \"", "5"],
     ["\"two words\"", "5"],
     ["\"a b c d e\"", "1"],
+    ["\"longword\"", "8"],
+    ["\"day\"", "3"],
+    ["\"  space  \"", "5"],
+    ["\"two words\"", "5"],
+    ["\"a b c d e\"", "1"],
     ["\"longword\"", "8"]
   ]),
   p("FizzBuzz", "easy", ["array","math","string"], {fn:"fizzBuzz",ret:"string[]",params:[{name:"n",type:"int"}]},
@@ -274,7 +289,12 @@ export const problems: Problem[] = [
     ["5", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\"]", "5 is divisible by 5."],
     ["1", "[\"1\"]"],
     ["6", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\"]"],
-    ["15", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\",\"8\",\"Fizz\",\"Buzz\",\"11\",\"Fizz\",\"13\",\"14\",\"FizzBuzz\"]"]
+    ["15", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\",\"8\",\"Fizz\",\"Buzz\",\"11\",\"Fizz\",\"13\",\"14\",\"FizzBuzz\"]"],
+    ["6", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\"]"],
+    ["2", "[\"1\",\"2\"]"],
+    ["4", "[\"1\",\"2\",\"Fizz\",\"4\"]"],
+    ["7", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\"]"],
+    ["9", "[\"1\",\"2\",\"Fizz\",\"4\",\"Buzz\",\"Fizz\",\"7\",\"8\",\"Fizz\"]"]
   ]),
   p("Reverse Integer", "easy", ["math"], {fn:"reverse",ret:"int",params:[{name:"x",type:"int"}]},
     "Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0. Assume the environment does not allow you to store 64-bit integers.",
@@ -284,6 +304,11 @@ export const problems: Problem[] = [
     ["-123", "-321", "Reversing -123 gives -321 (sign is preserved)."],
     ["120", "21"],
     ["0", "0"],
+    ["1534236469", "0"],
+    ["100", "1"],
+    ["-100", "-1"],
+    ["900000", "9"],
+    ["10", "1"],
     ["1534236469", "0"]
   ]),
   p("Valid Anagram", "easy", ["string","hash table","sorting"], {fn:"isAnagram",ret:"bool",params:[{name:"s",type:"string"},{name:"t",type:"string"}]},
@@ -294,7 +319,12 @@ export const problems: Problem[] = [
     ["\"rat\", \"car\"", "false", "'car' cannot be rearranged to form 'rat'."],
     ["\"a\", \"a\"", "true"],
     ["\"ab\", \"ba\"", "true"],
-    ["\"aa\", \"ab\"", "false"]
+    ["\"aa\", \"ab\"", "false"],
+    ["\"rat\", \"car\"", "false"],
+    ["\"listen\", \"silent\"", "true"],
+    ["\"a\", \"a\"", "true"],
+    ["\"ab\", \"ba\"", "true"],
+    ["\"abc\", \"abd\"", "false"]
   ]),
   p("First Unique Character", "easy", ["string","hash table"], {fn:"firstUniqChar",ret:"int",params:[{name:"s",type:"string"}]},
     "Given a string s, find the first non-repeating character in it and return its index. If no unique character exists, return -1. A non-repeating character is one that appears exactly once in the string.",
@@ -304,7 +334,12 @@ export const problems: Problem[] = [
     ["\"loveleetcode\"", "2", "'v' at index 2 is the first character that does not repeat."],
     ["\"aabb\"", "-1"],
     ["\"z\"", "0"],
-    ["\"aabbcc\"", "-1"]
+    ["\"aabbcc\"", "-1"],
+    ["\"abcabc\"", "-1"],
+    ["\"abcde\"", "0"],
+    ["\"aabbc\"", "4"],
+    ["\"aaaa\"", "-1"],
+    ["\"z\"", "0"]
   ]),
   p("Squares of Sorted Array", "easy", ["array","two pointers"], {fn:"sortedSquares",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order. Note that squaring negative numbers can change the ordering, so a simple square-and-return approach won't work — consider using a two-pointer technique.",
@@ -314,7 +349,12 @@ export const problems: Problem[] = [
     ["[-7,-3,2,3,11]", "[4,9,9,49,121]", "Squares are [49,9,4,9,121]. Sorted: [4,9,9,49,121]."],
     ["[1,2,3]", "[1,4,9]"],
     ["[-5,-3,-1]", "[1,9,25]"],
-    ["[0]", "[0]"]
+    ["[0]", "[0]"],
+    ["[-1,0,1]", "[0,1,1]"],
+    ["[0]", "[0]"],
+    ["[-2,-1]", "[1,4]"],
+    ["[1,2,3,4]", "[1,4,9,16]"],
+    ["[-3,0,3]", "[0,9,9]"]
   ]),
   p("Intersection of Two Arrays", "easy", ["array","hash table"], {fn:"intersection",ret:"int[]",params:[{name:"nums1",type:"int[]"},{name:"nums2",type:"int[]"}]},
     "Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and the result should be sorted in ascending order. The intersection of two arrays is the set of elements present in both arrays.",
@@ -324,7 +364,12 @@ export const problems: Problem[] = [
     ["[4,9,5], [9,4,9,8,4]", "[4,9]", "4 and 9 appear in both arrays. Sorted: [4,9]."],
     ["[1,2,3], [4,5,6]", "[]"],
     ["[1,1], [1]", "[1]"],
-    ["[3,1,2], [2,3,4]", "[2,3]"]
+    ["[3,1,2], [2,3,4]", "[2,3]"],
+    ["[1,2,3], [4,5,6]", "[]"],
+    ["[1,1], [1]", "[1]"],
+    ["[3,1,2], [2,3]", "[2,3]"],
+    ["[5,5,5], [5]", "[5]"],
+    ["[1,2], [2,1]", "[1,2]"]
   ]),
   p("Power of Two", "easy", ["math","bit manipulation"], {fn:"isPowerOfTwo",ret:"bool",params:[{name:"n",type:"int"}]},
     "Given an integer n, return true if it is a power of two. Otherwise, return false. An integer n is a power of two if there exists an integer x such that n == 2^x. Powers of two in binary have exactly one '1' bit.",
@@ -334,7 +379,12 @@ export const problems: Problem[] = [
     ["16", "true", "2^4 = 16, so 16 is a power of two."],
     ["3", "false"],
     ["1024", "true"],
-    ["0", "false"]
+    ["0", "false"],
+    ["3", "false"],
+    ["1024", "true"],
+    ["0", "false"],
+    ["64", "true"],
+    ["-16", "false"]
   ]),
   p("Missing Number", "easy", ["array","math"], {fn:"missingNumber",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array. You can solve this using the mathematical formula for the sum of the first n natural numbers, or using XOR bit manipulation.",
@@ -344,7 +394,12 @@ export const problems: Problem[] = [
     ["[0,1]", "2", "n=2 so range is [0,1,2]. The missing number is 2."],
     ["[9,6,4,2,3,5,7,0,1]", "8"],
     ["[0]", "1"],
-    ["[1]", "0"]
+    ["[1]", "0"],
+    ["[9,6,4,2,3,5,7,0,1]", "8"],
+    ["[0]", "1"],
+    ["[1]", "0"],
+    ["[0,1,2,3]", "4"],
+    ["[2,0,3,1,5]", "4"]
   ]),
   p("Happy Number", "easy", ["math","hash table"], {fn:"isHappy",ret:"bool",params:[{name:"n",type:"int"}]},
     "Write an algorithm to determine if a number n is happy. A happy number is defined by the following process: Starting with any positive integer, replace the number by the sum of the squares of its digits. Repeat until the number equals 1 (happy) or loops endlessly in a cycle (not happy). Use a hash set to detect cycles.",
@@ -354,7 +409,12 @@ export const problems: Problem[] = [
     ["2", "false", "2→4→16→37→58→89→145→42→20→4... enters a cycle, never reaches 1."],
     ["1", "true"],
     ["7", "true"],
-    ["20", "false"]
+    ["20", "false"],
+    ["1", "true"],
+    ["7", "true"],
+    ["20", "false"],
+    ["100", "true"],
+    ["4", "false"]
   ]),
   p("Excel Column Number", "easy", ["string","math"], {fn:"titleToNumber",ret:"int",params:[{name:"columnTitle",type:"string"}]},
     "Given a string columnTitle that represents the column title as it appears in an Excel sheet, return its corresponding column number. The mapping is: A=1, B=2, ..., Z=26, AA=27, AB=28, and so on. This is essentially a base-26 number system where A=1 instead of 0.",
@@ -364,7 +424,12 @@ export const problems: Problem[] = [
     ["\"AB\"", "28", "A=1 in the 26s place (26) + B=2 = 28."],
     ["\"ZY\"", "701"],
     ["\"AA\"", "27"],
-    ["\"BA\"", "53"]
+    ["\"BA\"", "53"],
+    ["\"ZY\"", "701"],
+    ["\"AA\"", "27"],
+    ["\"BA\"", "53"],
+    ["\"Z\"", "26"],
+    ["\"AZ\"", "52"]
   ]),
   p("Add Binary", "easy", ["string","math"], {fn:"addBinary",ret:"string",params:[{name:"a",type:"string"},{name:"b",type:"string"}]},
     "Given two binary strings a and b, return their sum as a binary string. You must handle the addition bit by bit from right to left, carrying over as needed, similar to how you add decimal numbers by hand.",
@@ -374,7 +439,12 @@ export const problems: Problem[] = [
     ["\"1010\", \"1011\"", "\"10101\"", "Binary: 1010 (10) + 1011 (11) = 10101 (21)."],
     ["\"0\", \"0\"", "\"0\""],
     ["\"1\", \"1\"", "\"10\""],
-    ["\"100\", \"110010\"", "\"110110\""]
+    ["\"100\", \"110010\"", "\"110110\""],
+    ["\"0\", \"0\"", "\"0\""],
+    ["\"1\", \"1\"", "\"10\""],
+    ["\"100\", \"110010\"", "\"110110\""],
+    ["\"111\", \"111\"", "\"1110\""],
+    ["\"10\", \"10\"", "\"100\""]
   ]),
   p("Sqrt Integer", "easy", ["math","binary search"], {fn:"mySqrt",ret:"int",params:[{name:"x",type:"int"}]},
     "Given a non-negative integer x, compute and return the integer square root of x. Since the return type is an integer, the decimal digits are truncated (floor). For example, sqrt(8) = 2.828..., so return 2. You should implement this using binary search for O(log n) efficiency.",
@@ -384,7 +454,12 @@ export const problems: Problem[] = [
     ["8", "2", "sqrt(8) = 2.828..., truncated to 2."],
     ["0", "0"],
     ["1", "1"],
-    ["100", "10"]
+    ["100", "10"],
+    ["0", "0"],
+    ["1", "1"],
+    ["100", "10"],
+    ["16", "4"],
+    ["26", "5"]
   ]),
   p("Pascal Triangle Row", "easy", ["array","dp"], {fn:"getRow",ret:"int[]",params:[{name:"rowIndex",type:"int"}]},
     "Given an integer rowIndex, return the rowIndex-th row of Pascal's triangle (0-indexed). In Pascal's triangle, each number is the sum of the two numbers directly above it. Row 0 is [1], row 1 is [1,1], row 2 is [1,2,1], and so on.",
@@ -394,7 +469,12 @@ export const problems: Problem[] = [
     ["0", "[1]", "Row 0 is just [1]."],
     ["1", "[1,1]"],
     ["4", "[1,4,6,4,1]"],
-    ["5", "[1,5,10,10,5,1]"]
+    ["5", "[1,5,10,10,5,1]"],
+    ["1", "[1,1]"],
+    ["4", "[1,4,6,4,1]"],
+    ["5", "[1,5,10,10,5,1]"],
+    ["2", "[1,2,1]"],
+    ["6", "[1,6,15,20,15,6,1]"]
   ]),
   p("Fibonacci Number", "easy", ["math","dp"], {fn:"fib",ret:"int",params:[{name:"n",type:"int"}]},
     "The Fibonacci numbers form a sequence where each number is the sum of the two preceding ones: F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2) for n > 1. Given n, calculate F(n). The sequence starts: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...",
@@ -404,7 +484,12 @@ export const problems: Problem[] = [
     ["3", "2", "F(3) = F(2) + F(1) = 1 + 1 = 2."],
     ["4", "3"],
     ["10", "55"],
-    ["0", "0"]
+    ["0", "0"],
+    ["4", "3"],
+    ["10", "55"],
+    ["0", "0"],
+    ["1", "1"],
+    ["8", "21"]
   ]),
   p("Number of 1 Bits", "easy", ["bit manipulation"], {fn:"hammingWeight",ret:"int",params:[{name:"n",type:"int"}]},
     "Write a function that takes the integer n and returns the number of '1' bits in its binary representation (also known as the Hamming weight). For example, the integer 11 has binary representation 1011, which has three '1' bits.",
@@ -414,7 +499,12 @@ export const problems: Problem[] = [
     ["128", "1", "128 in binary is 10000000, which has one 1-bit."],
     ["0", "0"],
     ["255", "8"],
-    ["1", "1"]
+    ["1", "1"],
+    ["0", "0"],
+    ["255", "8"],
+    ["1", "1"],
+    ["7", "3"],
+    ["1023", "10"]
   ]),
   p("Majority Element", "easy", ["array","hash table"], {fn:"majorityElement",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an array nums of size n, return the majority element. The majority element is the element that appears more than ⌊n/2⌋ times. You may assume that the majority element always exists in the array. Try solving it in O(n) time and O(1) space using Boyer-Moore Voting Algorithm.",
@@ -424,7 +514,12 @@ export const problems: Problem[] = [
     ["[2,2,1,1,1,2,2]", "2", "2 appears 4 times out of 7 elements (more than 7/2 = 3.5 times)."],
     ["[1]", "1"],
     ["[6,6,6,7,7]", "6"],
-    ["[5,5,1,1,5]", "5"]
+    ["[5,5,1,1,5]", "5"],
+    ["[1]", "1"],
+    ["[6,6,6,7,7]", "6"],
+    ["[5,5,1,1,5]", "5"],
+    ["[1,1,2]", "1"],
+    ["[9,9,9,9,1]", "9"]
   ]),
   p("Numbers With Even Digits", "easy", ["array","math"], {fn:"numbersWithEvenDigits",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array nums, return how many of the numbers contain an even number of digits. For example, 12 has 2 digits (even), while 345 has 3 digits (odd). Count each element that has 2, 4, 6, etc. digits.",
@@ -434,7 +529,12 @@ export const problems: Problem[] = [
     ["[555,901,482,1771]", "1", "Only 1771 has 4 digits (even). The rest have 3 digits (odd)."],
     ["[10,100,1000]", "2"],
     ["[1,22,333,4444]", "2"],
-    ["[99,9999]", "2"]
+    ["[99,9999]", "2"],
+    ["[10,100,1000]", "2"],
+    ["[1,22,333,4444]", "2"],
+    ["[99,9999]", "2"],
+    ["[1,2,3,4,5]", "0"],
+    ["[11,22,33]", "3"]
   ]),
   p("Defang IP Address", "easy", ["string"], {fn:"defangIPaddr",ret:"string",params:[{name:"address",type:"string"}]},
     "Given a valid IPv4 IP address, return a defanged version of that IP address. A defanged IP address replaces every period '.' with '[.]'. This is commonly used in cybersecurity to prevent URLs from being clickable.",
@@ -444,7 +544,12 @@ export const problems: Problem[] = [
     ["\"255.100.50.0\"", "\"255[.]100[.]50[.]0\"", "All three periods are defanged."],
     ["\"0.0.0.0\"", "\"0[.]0[.]0[.]0\""],
     ["\"192.168.1.1\"", "\"192[.]168[.]1[.]1\""],
-    ["\"10.0.0.255\"", "\"10[.]0[.]0[.]255\""]
+    ["\"10.0.0.255\"", "\"10[.]0[.]0[.]255\""],
+    ["\"0.0.0.0\"", "\"0[.]0[.]0[.]0\""],
+    ["\"192.168.1.1\"", "\"192[.]168[.]1[.]1\""],
+    ["\"10.0.0.255\"", "\"10[.]0[.]0[.]255\""],
+    ["\"127.0.0.1\"", "\"127[.]0[.]0[.]1\""],
+    ["\"8.8.8.8\"", "\"8[.]8[.]8[.]8\""]
   ]),
   p("Running Sum", "easy", ["array","prefix sum"], {fn:"runningSum",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an array nums, return the running sum of the array. The running sum is defined as runningSum[i] = sum(nums[0]...nums[i]). Each element in the result is the cumulative sum of all elements up to that index. This is also known as a prefix sum.",
@@ -454,7 +559,12 @@ export const problems: Problem[] = [
     ["[1,1,1,1,1]", "[1,2,3,4,5]", "Each step adds 1: [1, 2, 3, 4, 5]."],
     ["[3,1,2,10,1]", "[3,4,6,16,17]"],
     ["[5]", "[5]"],
-    ["[0,0,0]", "[0,0,0]"]
+    ["[0,0,0]", "[0,0,0]"],
+    ["[3,1,2,10,1]", "[3,4,6,16,17]"],
+    ["[5]", "[5]"],
+    ["[0,0,0]", "[0,0,0]"],
+    ["[1,-1,1,-1]", "[1,0,1,0]"],
+    ["[10,20,30]", "[10,30,60]"]
   ]),
   p("Shuffle The Array", "easy", ["array"], {fn:"shuffle",ret:"int[]",params:[{name:"nums",type:"int[]"},{name:"n",type:"int"}]},
     "Given an array nums consisting of 2n elements in the form [x1,x2,...,xn,y1,y2,...,yn], return the array in the form [x1,y1,x2,y2,...,xn,yn]. Essentially, interleave the first half with the second half of the array.",
@@ -464,7 +574,12 @@ export const problems: Problem[] = [
     ["[1,2,3,4,4,3,2,1], 4", "[1,4,2,3,3,2,4,1]", "First half: [1,2,3,4], second half: [4,3,2,1]. Interleaved."],
     ["[1,1,2,2], 2", "[1,2,1,2]"],
     ["[10,20], 1", "[10,20]"],
-    ["[1,2,3,11,12,13], 3", "[1,11,2,12,3,13]"]
+    ["[1,2,3,11,12,13], 3", "[1,11,2,12,3,13]"],
+    ["[1,1,2,2], 2", "[1,2,1,2]"],
+    ["[10,20], 1", "[10,20]"],
+    ["[1,2,3,11,12,13], 3", "[1,11,2,12,3,13]"],
+    ["[4,5,6,7,8,9], 3", "[4,7,5,8,6,9]"],
+    ["[1,3,5,2,4,6], 3", "[1,2,3,4,5,6]"]
   ]),
   p("Group Anagrams", "medium", ["array","string","hash table"], {fn:"groupAnagrams",ret:"string[][]",params:[{name:"strs",type:"string[]"}]},
     "Given an array of strings strs, group the anagrams together. An anagram is a word formed by rearranging the letters of another word, using all original letters exactly once. You can return the answer in any order, but groups should be sorted by their first occurrence and each group maintains input order.",
@@ -474,7 +589,12 @@ export const problems: Problem[] = [
     ["[\"\"]", "[[\"\"]]", "A single empty string forms its own group."],
     ["[\"a\"]", "[[\"a\"]]"],
     ["[\"abc\",\"cba\",\"bac\"]", "[[\"abc\",\"cba\",\"bac\"]]"],
-    ["[\"x\",\"y\",\"x\"]", "[[\"x\",\"x\"],[\"y\"]]"]
+    ["[\"x\",\"y\",\"x\"]", "[[\"x\",\"x\"],[\"y\"]]"],
+    ["[\"\"]", "[[\"\"]]"],
+    ["[\"abc\",\"cba\",\"bac\"]", "[[\"abc\",\"cba\",\"bac\"]]"],
+    ["[\"x\",\"y\"]", "[[\"x\"],[\"y\"]]"],
+    ["[\"ab\",\"ba\"]", "[[\"ab\",\"ba\"]]"],
+    ["[\"a\"]", "[[\"a\"]]"]
   ]),
   p("Longest Substring Without Repeating", "medium", ["string","sliding window"], {fn:"lengthOfLongestSubstring",ret:"int",params:[{name:"s",type:"string"}]},
     "Given a string s, find the length of the longest substring without repeating characters. A substring is a contiguous sequence of characters within the string. Use the sliding window technique with a hash set to track characters in the current window.",
@@ -484,7 +604,12 @@ export const problems: Problem[] = [
     ["\"bbbbb\"", "1", "The answer is 'b' with length 1 since all characters are the same."],
     ["\"pwwkew\"", "3"],
     ["\"\"", "0"],
-    ["\"dvdf\"", "3"]
+    ["\"dvdf\"", "3"],
+    ["\"pwwkew\"", "3"],
+    ["\"\"", "0"],
+    ["\"dvdf\"", "3"],
+    ["\"abcde\"", "5"],
+    ["\"aab\"", "2"]
   ]),
   p("Longest Palindromic Substring", "medium", ["string","dp"], {fn:"longestPalindrome",ret:"string",params:[{name:"s",type:"string"}]},
     "Given a string s, return the longest palindromic substring in s. A palindrome reads the same forward and backward. Use either dynamic programming or the expand-around-center technique. If there are multiple answers of the same length, return any one.",
@@ -494,7 +619,12 @@ export const problems: Problem[] = [
     ["\"cbbd\"", "\"bb\"", "'bb' is the longest palindrome of length 2."],
     ["\"a\"", "\"a\""],
     ["\"ac\"", "\"a\""],
-    ["\"racecar\"", "\"racecar\""]
+    ["\"racecar\"", "\"racecar\""],
+    ["\"a\"", "\"a\""],
+    ["\"ac\"", "\"a\""],
+    ["\"racecar\"", "\"racecar\""],
+    ["\"abcba\"", "\"abcba\""],
+    ["\"aaaa\"", "\"aaaa\""]
   ]),
   p("Rotate Array", "medium", ["array","math"], {fn:"rotate",ret:"int[]",params:[{name:"nums",type:"int[]"},{name:"k",type:"int"}]},
     "Given an integer array nums, rotate the array to the right by k steps and return the result. When an element is pushed past the end, it wraps around to the beginning. Try to do this in-place with O(1) extra space using the array reversal technique.",
@@ -504,7 +634,12 @@ export const problems: Problem[] = [
     ["[-1,-100,3,99], 2", "[3,99,-1,-100]", "Rotate right 2 times: last 2 elements [3,99] move to front."],
     ["[1,2], 1", "[2,1]"],
     ["[1], 5", "[1]"],
-    ["[1,2,3], 0", "[1,2,3]"]
+    ["[1,2,3], 0", "[1,2,3]"],
+    ["[1,2], 1", "[2,1]"],
+    ["[1], 5", "[1]"],
+    ["[1,2,3], 0", "[1,2,3]"],
+    ["[1,2,3,4], 2", "[3,4,1,2]"],
+    ["[1,2,3], 3", "[1,2,3]"]
   ]),
   p("Product of Array Except Self", "medium", ["array","prefix"], {fn:"productExceptSelf",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer. You must write an algorithm that runs in O(n) time without using the division operator.",
@@ -514,7 +649,12 @@ export const problems: Problem[] = [
     ["[-1,1,0,-3,3]", "[0,0,9,0,0]", "Any position that includes the 0 in its product becomes 0."],
     ["[2,3]", "[3,2]"],
     ["[1,1,1]", "[1,1,1]"],
-    ["[5,2,4]", "[8,20,10]"]
+    ["[5,2,4]", "[8,20,10]"],
+    ["[2,3]", "[3,2]"],
+    ["[1,1,1]", "[1,1,1]"],
+    ["[5,2,4]", "[8,20,10]"],
+    ["[3,0,1]", "[0,3,0]"],
+    ["[1,2,3,4,5]", "[120,60,40,30,24]"]
   ]),
   p("Container With Most Water", "medium", ["array","two pointers"], {fn:"maxArea",ret:"int",params:[{name:"height",type:"int[]"}]},
     "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container that holds the most water. Return the maximum amount of water the container can store. Use the two-pointer technique starting from both ends.",
@@ -524,7 +664,12 @@ export const problems: Problem[] = [
     ["[1,1]", "1", "Only two lines: area = min(1,1) * 1 = 1."],
     ["[4,3,2,1,4]", "16"],
     ["[1,2,1]", "2"],
-    ["[2,3,4,5,18,17,6]", "17"]
+    ["[2,3,4,5,18,17,6]", "17"],
+    ["[4,3,2,1,4]", "16"],
+    ["[1,2,1]", "2"],
+    ["[2,3,4,5,18,17,6]", "17"],
+    ["[5,5,5,5]", "15"],
+    ["[1,1]", "1"]
   ]),
   p("3Sum", "medium", ["array","two pointers"], {fn:"threeSum",ret:"int[][]",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, j != k, and nums[i] + nums[j] + nums[k] == 0. The solution set must not contain duplicate triplets. Sort the array first, then use two pointers for each fixed element.",
@@ -534,7 +679,12 @@ export const problems: Problem[] = [
     ["[0,1,1]", "[]", "No three numbers sum to 0."],
     ["[0,0,0]", "[[0,0,0]]"],
     ["[-2,0,1,1,2]", "[[-2,0,2],[-2,1,1]]"],
-    ["[1,2,-2,-1]", "[]"]
+    ["[1,2,-2,-1]", "[]"],
+    ["[0,0,0]", "[[0,0,0]]"],
+    ["[-2,0,1,1,2]", "[[-2,0,2],[-2,1,1]]"],
+    ["[1,2,-2,-1]", "[]"],
+    ["[-1,0,1,0]", "[[-1,0,1]]"],
+    ["[0]", "[]"]
   ]),
   p("Set Matrix Zeroes", "medium", ["matrix","array"], {fn:"setZeroes",ret:"int[][]",params:[{name:"matrix",type:"int[][]"}]},
     "Given an m x n integer matrix, if an element is 0, set its entire row and column to 0's, then return the matrix. Do this in-place. A straightforward approach uses O(m+n) space; try to find an O(1) space solution by using the first row and column as markers.",
@@ -544,7 +694,12 @@ export const problems: Problem[] = [
     ["[[0,1,2,0],[3,4,5,2],[1,3,1,5]]", "[[0,0,0,0],[0,4,5,0],[0,3,1,0]]", "Zeros at (0,0) and (0,3) zero out row 0, col 0, and col 3."],
     ["[[1]]", "[[1]]"],
     ["[[0]]", "[[0]]"],
-    ["[[1,2],[3,4]]", "[[1,2],[3,4]]"]
+    ["[[1,2],[3,4]]", "[[1,2],[3,4]]"],
+    ["[[1]]", "[[1]]"],
+    ["[[0]]", "[[0]]"],
+    ["[[1,2],[3,4]]", "[[1,2],[3,4]]"],
+    ["[[1,0],[0,1]]", "[[0,0],[0,0]]"],
+    ["[[1,2,3],[0,5,6],[7,8,9]]", "[[0,2,3],[0,0,0],[0,8,9]]"]
   ]),
   p("Spiral Matrix", "medium", ["matrix","array"], {fn:"spiralOrder",ret:"int[]",params:[{name:"matrix",type:"int[][]"}]},
     "Given an m x n matrix, return all elements of the matrix in spiral order. Start from the top-left corner and traverse right, then down, then left, then up, repeating this pattern layer by layer until all elements are visited.",
@@ -554,7 +709,12 @@ export const problems: Problem[] = [
     ["[[1,2,3,4],[5,6,7,8],[9,10,11,12]]", "[1,2,3,4,8,12,11,10,9,5,6,7]", "Outer ring then inner row."],
     ["[[1]]", "[1]"],
     ["[[1,2],[3,4]]", "[1,2,4,3]"],
-    ["[[1],[2],[3]]", "[1,2,3]"]
+    ["[[1],[2],[3]]", "[1,2,3]"],
+    ["[[1]]", "[1]"],
+    ["[[1,2],[3,4]]", "[1,2,4,3]"],
+    ["[[1],[2],[3]]", "[1,2,3]"],
+    ["[[1,2]]", "[1,2]"],
+    ["[[1,2,3,4,5]]", "[1,2,3,4,5]"]
   ]),
   p("Rotate Image", "medium", ["matrix","array"], {fn:"rotateImage",ret:"int[][]",params:[{name:"matrix",type:"int[][]"}]},
     "Given an n x n matrix, rotate it 90 degrees clockwise in place and return the rotated matrix.",
@@ -564,7 +724,12 @@ export const problems: Problem[] = [
     ["[[1,2],[3,4]]", "[[3,1],[4,2]]"],
     ["[[1]]", "[[1]]"],
     ["[[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]", "[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]"],
-    ["[[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]", "[[13,9,5,1],[14,10,6,2],[15,11,7,3],[16,12,8,4]]"]
+    ["[[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]", "[[13,9,5,1],[14,10,6,2],[15,11,7,3],[16,12,8,4]]"],
+    ["[[1,2],[3,4]]", "[[3,1],[4,2]]"],
+    ["[[1]]", "[[1]]"],
+    ["[[1,2,3],[4,5,6],[7,8,9]]", "[[7,4,1],[8,5,2],[9,6,3]]"],
+    ["[[5,1],[10,6]]", "[[10,5],[6,1]]"],
+    ["[[2,1],[4,3]]", "[[4,2],[3,1]]"]
   ]),
   p("Word Break", "medium", ["string","dp"], {fn:"wordBreak",ret:"bool",params:[{name:"s",type:"string"},{name:"wordDict",type:"string[]"}]},
     "Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words. The same word in the dictionary may be reused multiple times in the segmentation. Use dynamic programming where dp[i] represents whether s[0..i-1] can be segmented.",
@@ -574,7 +739,12 @@ export const problems: Problem[] = [
     ["\"applepenapple\", [\"apple\",\"pen\"]", "true", "Segmented as 'apple' + 'pen' + 'apple'. 'apple' is reused."],
     ["\"catsandog\", [\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]", "false"],
     ["\"a\", [\"a\"]", "true"],
-    ["\"abcd\", [\"a\",\"abc\",\"b\",\"cd\"]", "true"]
+    ["\"abcd\", [\"a\",\"abc\",\"b\",\"cd\"]", "true"],
+    ["\"catsandog\", [\"cats\",\"dog\",\"sand\",\"and\",\"cat\"]", "false"],
+    ["\"a\", [\"a\"]", "true"],
+    ["\"abcd\", [\"a\",\"abc\",\"b\",\"cd\"]", "true"],
+    ["\"bb\", [\"a\",\"b\",\"bbb\"]", "true"],
+    ["\"cars\", [\"car\",\"ca\",\"rs\"]", "true"]
   ]),
   p("Coin Change", "medium", ["dp","array"], {fn:"coinChange",ret:"int",params:[{name:"coins",type:"int[]"},{name:"amount",type:"int"}]},
     "You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money. Return the fewest number of coins needed to make up that amount. If that amount cannot be made up by any combination of the coins, return -1. You may use each coin denomination an unlimited number of times. Use bottom-up DP.",
@@ -584,7 +754,12 @@ export const problems: Problem[] = [
     ["[2], 3", "-1", "3 cannot be made with only denomination 2."],
     ["[1], 0", "0"],
     ["[1,2,5], 100", "20"],
-    ["[2,5,10,1], 27", "4"]
+    ["[2,5,10,1], 27", "4"],
+    ["[1], 0", "0"],
+    ["[1,2,5], 100", "20"],
+    ["[2,5,10,1], 27", "4"],
+    ["[1], 1", "1"],
+    ["[5,10], 3", "-1"]
   ]),
   p("House Robber", "medium", ["dp"], {fn:"rob",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. Adjacent houses have security systems connected, so if two adjacent houses are broken into on the same night, police will be alerted. Given an array nums representing the amount of money in each house, return the maximum amount of money you can rob tonight without alerting the police.",
@@ -594,7 +769,12 @@ export const problems: Problem[] = [
     ["[2,7,9,3,1]", "12", "Rob house 1 (2) + house 3 (9) + house 5 (1) = 12."],
     ["[2,1,1,2]", "4"],
     ["[5]", "5"],
-    ["[10,1,10,1,10]", "30"]
+    ["[10,1,10,1,10]", "30"],
+    ["[2,1,1,2]", "4"],
+    ["[5]", "5"],
+    ["[10,1,10,1,10]", "30"],
+    ["[1,2]", "2"],
+    ["[100,1,1,100]", "200"]
   ]),
   p("Unique Paths", "medium", ["dp","math"], {fn:"uniquePaths",ret:"int",params:[{name:"m",type:"int"},{name:"n",type:"int"}]},
     "There is a robot on an m x n grid. The robot is initially located at the top-left corner (grid[0][0]). The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner (grid[m-1][n-1]). How many unique paths are there? Can be solved with DP or combinatorics: C(m+n-2, m-1).",
@@ -604,7 +784,12 @@ export const problems: Problem[] = [
     ["3, 2", "3", "3 paths: Right-Down-Down, Down-Right-Down, Down-Down-Right."],
     ["7, 3", "28"],
     ["1, 1", "1"],
-    ["2, 2", "2"]
+    ["2, 2", "2"],
+    ["7, 3", "28"],
+    ["1, 1", "1"],
+    ["2, 2", "2"],
+    ["4, 4", "20"],
+    ["10, 10", "48620"]
   ]),
   p("Maximum Product Subarray", "medium", ["array","dp"], {fn:"maxProduct",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array nums, find a contiguous non-empty subarray within the array that has the largest product, and return the product. A negative number times a negative number becomes positive, so you need to track both the maximum and minimum product at each position.",
@@ -614,7 +799,12 @@ export const problems: Problem[] = [
     ["[-2,0,-1]", "0", "The subarrays [-2], [0], [-1] have products -2, 0, -1. Maximum is 0."],
     ["[-2,3,-4]", "24"],
     ["[0,2]", "2"],
-    ["[-2]", "-2"]
+    ["[-2]", "-2"],
+    ["[-2,3,-4]", "24"],
+    ["[0,2]", "2"],
+    ["[-2]", "-2"],
+    ["[1,2,3,0,4,5]", "20"],
+    ["[-1,-2,-3]", "6"]
   ]),
   p("Number of Islands", "medium", ["matrix","dfs"], {fn:"numIslands",ret:"int",params:[{name:"grid",type:"string[][]"}]},
     "Given an m x n 2D binary grid which represents a map of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are surrounded by water. Use DFS or BFS to flood-fill each island.",
@@ -624,7 +814,12 @@ export const problems: Problem[] = [
     ["[[\"1\",\"1\",\"1\"],[\"0\",\"1\",\"0\"],[\"1\",\"1\",\"1\"]]", "1", "All land cells are connected, forming one island."],
     ["[[\"0\"]]", "0"],
     ["[[\"1\"]]", "1"],
-    ["[[\"1\",\"0\",\"1\"],[\"0\",\"0\",\"0\"],[\"1\",\"0\",\"1\"]]", "4"]
+    ["[[\"1\",\"0\",\"1\"],[\"0\",\"0\",\"0\"],[\"1\",\"0\",\"1\"]]", "4"],
+    ["[[\"0\"]]", "0"],
+    ["[[\"1\"]]", "1"],
+    ["[[\"1\",\"0\"],[\"0\",\"1\"]]", "2"],
+    ["[[\"1\",\"1\"],[\"1\",\"1\"]]", "1"],
+    ["[[\"0\",\"0\"],[\"0\",\"0\"]]", "0"]
   ]),
   p("Find Minimum in Rotated Sorted", "medium", ["array","binary search"], {fn:"findMin",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]. Given the sorted rotated array nums of unique elements, return the minimum element. You must write an algorithm that runs in O(log n) time using binary search.",
@@ -634,7 +829,12 @@ export const problems: Problem[] = [
     ["[4,5,6,7,0,1,2]", "0", "Original was [0,1,2,4,5,6,7], rotated 4 times. Min is 0."],
     ["[11,13,15,17]", "11"],
     ["[2,1]", "1"],
-    ["[5,1,2,3,4]", "1"]
+    ["[5,1,2,3,4]", "1"],
+    ["[11,13,15,17]", "11"],
+    ["[2,1]", "1"],
+    ["[5,1,2,3,4]", "1"],
+    ["[1]", "1"],
+    ["[3,1,2]", "1"]
   ]),
   p("Search in Rotated Sorted", "medium", ["array","binary search"], {fn:"search",ret:"int",params:[{name:"nums",type:"int[]"},{name:"target",type:"int"}]},
     "There is an integer array nums sorted in ascending order with distinct values. Prior to being passed, nums is possibly rotated at an unknown pivot index. Given the rotated array nums and an integer target, return the index of target if it is in nums, or -1 otherwise. You must write an algorithm with O(log n) runtime using modified binary search.",
@@ -644,7 +844,12 @@ export const problems: Problem[] = [
     ["[4,5,6,7,0,1,2], 3", "-1", "3 is not in the array, return -1."],
     ["[1], 0", "-1"],
     ["[1,3], 3", "1"],
-    ["[5,1,3], 3", "2"]
+    ["[5,1,3], 3", "2"],
+    ["[1], 0", "-1"],
+    ["[1,3], 3", "1"],
+    ["[5,1,3], 3", "2"],
+    ["[3,1], 1", "1"],
+    ["[1,3,5], 5", "2"]
   ]),
   p("Top K Frequent", "medium", ["array","hash table","heap"], {fn:"topKFrequent",ret:"int[]",params:[{name:"nums",type:"int[]"},{name:"k",type:"int"}]},
     "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order. It is guaranteed the answer is unique. Use a hash map to count frequencies, then a min-heap or bucket sort to extract the top k elements efficiently.",
@@ -654,7 +859,12 @@ export const problems: Problem[] = [
     ["[1], 1", "[1]", "Only one element, so it's the most frequent."],
     ["[4,1,-1,2,-1,2,3], 2", "[-1,2]"],
     ["[5,5,5,9,9,1], 1", "[5]"],
-    ["[1,2,3], 3", "[1,2,3]"]
+    ["[1,2,3], 3", "[1,2,3]"],
+    ["[4,1,-1,2,-1,2,3], 2", "[-1,2]"],
+    ["[5,5,5], 1", "[5]"],
+    ["[1,2,3], 3", "[1,2,3]"],
+    ["[1,1,2,2,3], 2", "[1,2]"],
+    ["[7,7,7,7], 1", "[7]"]
   ]),
   p("Sort Colors", "medium", ["array","two pointers","sorting"], {fn:"sortColors",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an array nums with n objects colored red (0), white (1), or blue (2), sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue. You must solve this without using the library's sort function. This is known as the Dutch National Flag problem - use three pointers.",
@@ -664,7 +874,12 @@ export const problems: Problem[] = [
     ["[2,0,1]", "[0,1,2]", "One of each color, sorted in order."],
     ["[0]", "[0]"],
     ["[1,2,0]", "[0,1,2]"],
-    ["[2,2,2,1,1,0]", "[0,1,1,2,2,2]"]
+    ["[2,2,2,1,1,0]", "[0,1,1,2,2,2]"],
+    ["[0]", "[0]"],
+    ["[1,2,0]", "[0,1,2]"],
+    ["[2,2,2,1,1,0]", "[0,1,1,2,2,2]"],
+    ["[1,0]", "[0,1]"],
+    ["[0,0,0]", "[0,0,0]"]
   ]),
   p("Subsets", "medium", ["array","backtracking"], {fn:"subsets",ret:"int[][]",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array `nums` of unique elements, return all possible subsets sorted lexicographically (each subset sorted ascending; outer list sorted by length then lex).",
@@ -674,7 +889,12 @@ export const problems: Problem[] = [
     ["[0]", "[[],[0]]"],
     ["[1,2]", "[[],[1],[2],[1,2]]"],
     ["[1]", "[[],[1]]"],
-    ["[5,6]", "[[],[5],[6],[5,6]]"]
+    ["[5,6]", "[[],[5],[6],[5,6]]"],
+    ["[0]", "[[],[0]]"],
+    ["[5,6]", "[[],[5],[6],[5,6]]"],
+    ["[1]", "[[],[1]]"],
+    ["[9,8]", "[[],[8],[9],[8,9]]"],
+    ["[3,2,1]", "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]"]
   ]),
   p("Permutations", "medium", ["array","backtracking"], {fn:"permute",ret:"int[][]",params:[{name:"nums",type:"int[]"}]},
     "Given an array nums of distinct integers, return all the possible permutations in any order. A permutation is a rearrangement of all elements. Use backtracking: for each position, try placing each unused number, recurse, then backtrack. There are n! total permutations.",
@@ -684,7 +904,12 @@ export const problems: Problem[] = [
     ["[0,1]", "[[0,1],[1,0]]", "2! = 2 permutations."],
     ["[1]", "[[1]]"],
     ["[1,2]", "[[1,2],[2,1]]"],
-    ["[3,1,2]", "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]"]
+    ["[3,1,2]", "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]"],
+    ["[1]", "[[1]]"],
+    ["[1,2]", "[[1,2],[2,1]]"],
+    ["[0]", "[[0]]"],
+    ["[-1,1]", "[[-1,1],[1,-1]]"],
+    ["[3,2]", "[[2,3],[3,2]]"]
   ]),
   p("Combination Sum", "medium", ["array","backtracking"], {fn:"combinationSum",ret:"int[][]",params:[{name:"candidates",type:"int[]"},{name:"target",type:"int"}]},
     "Given an array of distinct integers `candidates` and a `target`, return all unique combinations of `candidates` (each used unlimited times) summing to `target`. Each combination ascending; result lex.",
@@ -694,7 +919,12 @@ export const problems: Problem[] = [
     ["[2,3,5], 8", "[[2,2,2,2],[2,3,3],[3,5]]"],
     ["[2], 1", "[]"],
     ["[1], 2", "[[1,1]]"],
-    ["[3,5], 8", "[[3,5]]"]
+    ["[3,5], 8", "[[3,5]]"],
+    ["[2], 1", "[]"],
+    ["[1], 2", "[[1,1]]"],
+    ["[3,5], 8", "[[3,5]]"],
+    ["[1,2], 4", "[[1,1,1,1],[1,1,2],[2,2]]"],
+    ["[7], 7", "[[7]]"]
   ]),
   p("Generate Parentheses", "medium", ["string","backtracking"], {fn:"generateParenthesis",ret:"string[]",params:[{name:"n",type:"int"}]},
     "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses. A combination is well-formed if every opening bracket has a corresponding closing bracket in the correct order. Use backtracking, tracking the count of open and close brackets used so far.",
@@ -704,7 +934,12 @@ export const problems: Problem[] = [
     ["1", "[\"()\"]", "Only one valid combination with 1 pair."],
     ["2", "[\"(())\",\"()()\"]"],
     ["4", "[\"(((())))\",\"((()()))\",\"((())())\",\"((()))()\",\"(()(()))\",\"(()()())\",\"(()())()\",\"(())(())\",\"(())()()\",\"()((()))\",\"()(()())\",\"()(())()\",\"()()(())\",\"()()()()\"]"],
-    ["0", "[\"\"]"]
+    ["0", "[\"\"]"],
+    ["2", "[\"(())\",\"()()\"]"],
+    ["1", "[\"()\"]"],
+    ["0", "[\"\"]"],
+    ["4", "14 combos"],
+    ["3", "[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]"]
   ]),
   p("Letter Combinations", "medium", ["string","backtracking"], {fn:"letterCombinations",ret:"string[]",params:[{name:"digits",type:"string"}]},
     "Given a string of digits 2-9, return all possible letter combinations that the number could represent on a phone (2->abc, 3->def, ..., 9->wxyz). Sorted lex.",
@@ -714,7 +949,12 @@ export const problems: Problem[] = [
     ["\"\"", "[]"],
     ["\"2\"", "[\"a\",\"b\",\"c\"]"],
     ["\"7\"", "[\"p\",\"q\",\"r\",\"s\"]"],
-    ["\"9\"", "[\"w\",\"x\",\"y\",\"z\"]"]
+    ["\"9\"", "[\"w\",\"x\",\"y\",\"z\"]"],
+    ["\"2\"", "[\"a\",\"b\",\"c\"]"],
+    ["\"\"", "[]"],
+    ["\"9\"", "[\"w\",\"x\",\"y\",\"z\"]"],
+    ["\"22\"", "[\"aa\",\"ab\",\"ac\",\"ba\",\"bb\",\"bc\",\"ca\",\"cb\",\"cc\"]"],
+    ["\"7\"", "[\"p\",\"q\",\"r\",\"s\"]"]
   ]),
   p("Decode Ways", "medium", ["string","dp"], {fn:"numDecodings",ret:"int",params:[{name:"s",type:"string"}]},
     "A digit string can be decoded as letters via 'A'=1 ... 'Z'=26. Given `s`, return the number of distinct decodings.",
@@ -724,12 +964,22 @@ export const problems: Problem[] = [
     ["\"226\"", "3"],
     ["\"06\"", "0"],
     ["\"11106\"", "2"],
-    ["\"10\"", "1"]
+    ["\"10\"", "1"],
+    ["\"12\"", "2"],
+    ["\"226\"", "3"],
+    ["\"06\"", "0"],
+    ["\"10\"", "1"],
+    ["\"1111\"", "5"]
   ]),
   p("Decode String", "medium", ["string","stack"], {fn:"decodeString",ret:"string",params:[{name:"s",type:"string"}]},
     "Given an encoded string of the form k[encoded_string] (repeat encoded_string k times, can nest), return its decoded string.",
     "1 <= s.length <= 30",
     [
+    ["\"3[a]2[bc]\"", "\"aaabcbc\""],
+    ["\"3[a2[c]]\"", "\"accaccacc\""],
+    ["\"2[abc]3[cd]ef\"", "\"abcabccdcdcdef\""],
+    ["\"abc\"", "\"abc\""],
+    ["\"2[2[a]]\"", "\"aaaa\""],
     ["\"3[a]2[bc]\"", "\"aaabcbc\""],
     ["\"3[a2[c]]\"", "\"accaccacc\""],
     ["\"2[abc]3[cd]ef\"", "\"abcabccdcdcdef\""],
@@ -744,7 +994,12 @@ export const problems: Problem[] = [
     ["[30,40,50,60]", "[1,1,1,0]", "Each day is warmer than the previous, so wait 1 day each (except the last)."],
     ["[30,60,90]", "[1,1,0]"],
     ["[100,90,80]", "[0,0,0]"],
-    ["[55]", "[0]"]
+    ["[55]", "[0]"],
+    ["[30,60,90]", "[1,1,0]"],
+    ["[100,90,80]", "[0,0,0]"],
+    ["[55]", "[0]"],
+    ["[70,71,72]", "[1,1,0]"],
+    ["[80,70,60,70,80]", "[0,0,1,1,0]"]
   ]),
   p("Subarray Sum Equals K", "medium", ["array","prefix sum","hash"], {fn:"subarraySum",ret:"int",params:[{name:"nums",type:"int[]"},{name:"k",type:"int"}]},
     "Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k. A subarray is a contiguous part of an array. Use the prefix sum technique with a hash map: if prefixSum[j] - prefixSum[i] = k, then the subarray from i+1 to j sums to k.",
@@ -754,7 +1009,12 @@ export const problems: Problem[] = [
     ["[1,2,3], 3", "2", "Subarrays [1,2] and [3] both sum to 3."],
     ["[1], 0", "0"],
     ["[3,4,7,2,-3,1,4,2], 7", "4"],
-    ["[-1,-1,1], 0", "1"]
+    ["[-1,-1,1], 0", "1"],
+    ["[1], 0", "0"],
+    ["[-1,-1,1], 0", "1"],
+    ["[1,1,1,1], 2", "3"],
+    ["[0,0,0], 0", "6"],
+    ["[3,4,7,2,-3,1,4,2], 7", "4"]
   ]),
   p("Find Duplicates In Array", "medium", ["array"], {fn:"findDuplicates",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an array `nums` of length n where 1<=nums[i]<=n and at most one duplicate exists, return the duplicates sorted ascending.",
@@ -764,7 +1024,12 @@ export const problems: Problem[] = [
     ["[1,1,2]", "[1]"],
     ["[1]", "[]"],
     ["[5,4,6,5,7,4]", "[4,5]"],
-    ["[2,2]", "[2]"]
+    ["[2,2]", "[2]"],
+    ["[4,3,2,7,8,2,3,1]", "[2,3]"],
+    ["[1,1,2]", "[1]"],
+    ["[1]", "[]"],
+    ["[2,2]", "[2]"],
+    ["[1,2,3,4]", "[]"]
   ]),
   p("Longest Consecutive Sequence", "medium", ["array","hash"], {fn:"longestConsecutive",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence. You must write an algorithm that runs in O(n) time. Use a hash set: for each number that is the start of a sequence (num-1 not in set), count how long the consecutive chain extends.",
@@ -774,7 +1039,12 @@ export const problems: Problem[] = [
     ["[0,3,7,2,5,8,4,6,0,1]", "9", "The sequence [0,1,2,3,4,5,6,7,8] has length 9."],
     ["[]", "0"],
     ["[1]", "1"],
-    ["[1,2,0,1]", "3"]
+    ["[1,2,0,1]", "3"],
+    ["[]", "0"],
+    ["[1]", "1"],
+    ["[1,2,0,1]", "3"],
+    ["[9,1,4,7,3,-1,0,5,8,-1,6]", "7"],
+    ["[1,3,5,7]", "1"]
   ]),
   p("Word Pattern", "medium", ["string","hash"], {fn:"wordPattern",ret:"bool",params:[{name:"pattern",type:"string"},{name:"s",type:"string"}]},
     "Given a `pattern` and a string `s`, return `true` if `s` follows the same pattern (one-to-one mapping of letters to space-separated words).",
@@ -784,7 +1054,12 @@ export const problems: Problem[] = [
     ["\"abba\", \"dog cat cat fish\"", "false"],
     ["\"aaaa\", \"dog cat cat dog\"", "false"],
     ["\"abc\", \"x y z\"", "true"],
-    ["\"ab\", \"x x\"", "false"]
+    ["\"ab\", \"x x\"", "false"],
+    ["\"abba\", \"dog cat cat dog\"", "true"],
+    ["\"abba\", \"dog cat cat fish\"", "false"],
+    ["\"aaaa\", \"dog cat cat dog\"", "false"],
+    ["\"abba\", \"dog dog dog dog\"", "false"],
+    ["\"abc\", \"b c a\"", "true"]
   ]),
   p("Pow X N", "medium", ["math"], {fn:"myPow",ret:"double",params:[{name:"x",type:"double"},{name:"n",type:"int"}]},
     "Implement pow(x, n) computing x raised to the integer power n. Return the result rounded to 5 decimals.",
@@ -794,7 +1069,12 @@ export const problems: Problem[] = [
     ["2, -2", "0.25"],
     ["3, 0", "1"],
     ["1.5, 3", "3.375"],
-    ["10, 2", "100"]
+    ["10, 2", "100"],
+    ["2.00000, 10", "1024.00000"],
+    ["2.10000, 3", "9.26100"],
+    ["2.00000, -2", "0.25000"],
+    ["1.00000, 100", "1.00000"],
+    ["0.50000, 2", "0.25000"]
   ]),
   p("Count And Say", "medium", ["string"], {fn:"countAndSay",ret:"string",params:[{name:"n",type:"int"}]},
     "The count-and-say sequence: '1', '11', '21', '1211', '111221', ... where each term describes the previous. Return the n-th term.",
@@ -804,7 +1084,12 @@ export const problems: Problem[] = [
     ["4", "\"1211\""],
     ["5", "\"111221\""],
     ["6", "\"312211\""],
-    ["3", "\"21\""]
+    ["3", "\"21\""],
+    ["1", "\"1\""],
+    ["4", "\"1211\""],
+    ["2", "\"11\""],
+    ["3", "\"21\""],
+    ["5", "\"111221\""]
   ]),
   p("Multiply Strings", "medium", ["string","math"], {fn:"multiply",ret:"string",params:[{name:"num1",type:"string"},{name:"num2",type:"string"}]},
     "Given two non-negative integers `num1` and `num2` represented as strings, return their product as a string.",
@@ -814,7 +1099,12 @@ export const problems: Problem[] = [
     ["\"123\", \"456\"", "\"56088\""],
     ["\"0\", \"999\"", "\"0\""],
     ["\"99\", \"99\"", "\"9801\""],
-    ["\"12\", \"10\"", "\"120\""]
+    ["\"12\", \"10\"", "\"120\""],
+    ["\"2\", \"3\"", "\"6\""],
+    ["\"123\", \"456\"", "\"56088\""],
+    ["\"0\", \"0\"", "\"0\""],
+    ["\"99\", \"99\"", "\"9801\""],
+    ["\"1\", \"1\"", "\"1\""]
   ]),
   p("Insert Interval", "medium", ["array","intervals"], {fn:"insert",ret:"int[][]",params:[{name:"intervals",type:"int[][]"},{name:"newInterval",type:"int[]"}]},
     "Given non-overlapping `intervals` sorted by start, insert `newInterval` and merge if necessary. Return the resulting list.",
@@ -824,7 +1114,12 @@ export const problems: Problem[] = [
     ["[[1,2],[3,5],[6,7],[8,10],[12,16]], [4,8]", "[[1,2],[3,10],[12,16]]"],
     ["[], [5,7]", "[[5,7]]"],
     ["[[1,5]], [2,3]", "[[1,5]]"],
-    ["[[1,5]], [6,8]", "[[1,5],[6,8]]"]
+    ["[[1,5]], [6,8]", "[[1,5],[6,8]]"],
+    ["[[1,3],[6,9]], [2,5]", "[[1,5],[6,9]]"],
+    ["[], [5,7]", "[[5,7]]"],
+    ["[[1,5]], [2,3]", "[[1,5]]"],
+    ["[[1,5]], [6,8]", "[[1,5],[6,8]]"],
+    ["[[3,5],[12,15]], [6,6]", "[[3,5],[6,6],[12,15]]"]
   ]),
   p("Merge Intervals", "medium", ["array","intervals","sorting"], {fn:"merge",ret:"int[][]",params:[{name:"intervals",type:"int[][]"}]},
     "Given an array of `intervals` where intervals[i]=[start,end], merge all overlapping intervals and return them sorted by start.",
@@ -834,12 +1129,22 @@ export const problems: Problem[] = [
     ["[[1,4],[4,5]]", "[[1,5]]"],
     ["[[1,4],[2,3]]", "[[1,4]]"],
     ["[[1,4],[5,6]]", "[[1,4],[5,6]]"],
-    ["[[1,10],[2,3],[4,5]]", "[[1,10]]"]
+    ["[[1,10],[2,3],[4,5]]", "[[1,10]]"],
+    ["[[1,3],[2,6],[8,10],[15,18]]", "[[1,6],[8,10],[15,18]]"],
+    ["[[1,4],[4,5]]", "[[1,5]]"],
+    ["[[1,4],[0,4]]", "[[0,4]]"],
+    ["[[1,4]]", "[[1,4]]"],
+    ["[[1,4],[2,3]]", "[[1,4]]"]
   ]),
   p("Non Overlapping Intervals", "medium", ["array","intervals","greedy"], {fn:"eraseOverlapIntervals",ret:"int",params:[{name:"intervals",type:"int[][]"}]},
     "Given a set of `intervals`, return the minimum number to remove so the rest are non-overlapping.",
     "1 <= intervals.length <= 10^5",
     [
+    ["[[1,2],[2,3],[3,4],[1,3]]", "1"],
+    ["[[1,2],[1,2],[1,2]]", "2"],
+    ["[[1,2],[2,3]]", "0"],
+    ["[[1,100],[11,22],[1,11],[2,12]]", "2"],
+    ["[[1,2]]", "0"],
     ["[[1,2],[2,3],[3,4],[1,3]]", "1"],
     ["[[1,2],[1,2],[1,2]]", "2"],
     ["[[1,2],[2,3]]", "0"],
@@ -854,12 +1159,22 @@ export const problems: Problem[] = [
     ["[3,2,1,0,4]", "false", "You will always arrive at index 3. Its max jump is 0, so you can never reach index 4."],
     ["[0]", "true"],
     ["[1,0,1]", "false"],
-    ["[2,0,0]", "true"]
+    ["[2,0,0]", "true"],
+    ["[0]", "true"],
+    ["[1,0,1]", "false"],
+    ["[2,0,0]", "true"],
+    ["[1,1,1,0]", "true"],
+    ["[5,0,0,0,0,0]", "true"]
   ]),
   p("Sum of Two Integers", "medium", ["math","bit manipulation"], {fn:"getSum",ret:"int",params:[{name:"a",type:"int"},{name:"b",type:"int"}]},
     "Given two integers `a` and `b`, return their sum without using `+` or `-` operators.",
     "-1000 <= a, b <= 1000",
     [
+    ["1, 2", "3"],
+    ["2, 3", "5"],
+    ["-1, 1", "0"],
+    ["100, 200", "300"],
+    ["-5, -10", "-15"],
     ["1, 2", "3"],
     ["2, 3", "5"],
     ["-1, 1", "0"],
@@ -874,6 +1189,11 @@ export const problems: Problem[] = [
     ["[1,2,1,3,5,6,4]", "5"],
     ["[1]", "0"],
     ["[1,2]", "1"],
+    ["[5,4,3,2,1]", "0"],
+    ["[1,2,3,1]", "2"],
+    ["[1,2,1,3,5,6,4]", "5"],
+    ["[1]", "0"],
+    ["[1,2]", "1"],
     ["[5,4,3,2,1]", "0"]
   ]),
   p("Kth Largest Element", "medium", ["array","sorting","heap"], {fn:"findKthLargest",ret:"int",params:[{name:"nums",type:"int[]"},{name:"k",type:"int"}]},
@@ -884,7 +1204,12 @@ export const problems: Problem[] = [
     ["[3,2,3,1,2,4,5,5,6], 4", "4", "Sorted: [6,5,5,4,3,3,2,2,1]. The 4th largest is 4."],
     ["[1], 1", "1"],
     ["[7,10,4,3,20,15], 3", "10"],
-    ["[2,1], 1", "2"]
+    ["[2,1], 1", "2"],
+    ["[1], 1", "1"],
+    ["[7,10,4,3,20,15], 3", "10"],
+    ["[2,1], 1", "2"],
+    ["[5,5,5], 1", "5"],
+    ["[1,2,3,4,5], 5", "1"]
   ]),
   p("Median of Two Sorted Arrays", "hard", ["array","binary search"], {fn:"findMedianSortedArrays",ret:"double",params:[{name:"nums1",type:"int[]"},{name:"nums2",type:"int[]"}]},
     "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log(m+n)). The median is the middle value when all elements are sorted; for even-length, it's the average of the two middle values. Use binary search on the smaller array.",
@@ -894,7 +1219,12 @@ export const problems: Problem[] = [
     ["[1,2], [3,4]", "2.5", "Merged: [1,2,3,4]. Median is (2+3)/2 = 2.5."],
     ["[0,0], [0,0]", "0"],
     ["[1], [2,3,4]", "2.5"],
-    ["[1,2,3,4,5], []", "3"]
+    ["[1,2,3,4,5], []", "3"],
+    ["[0,0], [0,0]", "0"],
+    ["[1], [2,3,4]", "2.5"],
+    ["[1,2,3,4,5], []", "3"],
+    ["[1,3], [2,4]", "2.5"],
+    ["[2], [1,3]", "2"]
   ]),
   p("Trapping Rain Water", "hard", ["array","two pointers","stack"], {fn:"trap",ret:"int",params:[{name:"height",type:"int[]"}]},
     "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining. For each position, the water level is determined by the minimum of the maximum heights on its left and right sides. Can be solved with two pointers in O(n) time and O(1) space.",
@@ -904,7 +1234,12 @@ export const problems: Problem[] = [
     ["[4,2,0,3,2,5]", "9", "Water fills the valley between the tall bars. Total = 9 units."],
     ["[1]", "0"],
     ["[3,0,2,0,4]", "7"],
-    ["[5,4,1,2]", "1"]
+    ["[5,4,1,2]", "1"],
+    ["[1]", "0"],
+    ["[3,0,2,0,4]", "7"],
+    ["[5,4,1,2]", "1"],
+    ["[2,0,2]", "2"],
+    ["[4,2,3]", "1"]
   ]),
   p("Largest Rectangle Histogram", "hard", ["array","stack"], {fn:"largestRectangleArea",ret:"int",params:[{name:"heights",type:"int[]"}]},
     "Given an array of integers heights representing the histogram's bar heights where the width of each bar is 1, return the area of the largest rectangle in the histogram. Use a monotonic stack to find, for each bar, the nearest shorter bar on both sides to determine the rectangle's width.",
@@ -914,7 +1249,12 @@ export const problems: Problem[] = [
     ["[2,4]", "4", "The largest is a single bar of height 4, area = 4."],
     ["[1]", "1"],
     ["[6,2,5,4,5,1,6]", "12"],
-    ["[2,1,2]", "3"]
+    ["[2,1,2]", "3"],
+    ["[1]", "1"],
+    ["[6,2,5,4,5,1,6]", "12"],
+    ["[2,1,2]", "3"],
+    ["[3,3,3]", "9"],
+    ["[1,2,3,4,5]", "9"]
   ]),
   p("Sliding Window Maximum", "hard", ["array","deque","sliding window"], {fn:"maxSlidingWindow",ret:"int[]",params:[{name:"nums",type:"int[]"},{name:"k",type:"int"}]},
     "You are given an array of integers nums and a sliding window of size k which moves from the very left of the array to the very right. You can only see the k numbers in the window. Each time the window moves one position to the right, return the max of each window. Use a monotonic deque (double-ended queue) for O(n) time.",
@@ -924,7 +1264,12 @@ export const problems: Problem[] = [
     ["[1], 1", "[1]", "Single element window, max is itself."],
     ["[1,-1], 1", "[1,-1]"],
     ["[9,11], 2", "[11]"],
-    ["[4,-2,5,3,6], 3", "[5,5,6]"]
+    ["[4,-2,5,3,6], 3", "[5,5,6]"],
+    ["[1,-1], 1", "[1,-1]"],
+    ["[9,11], 2", "[11]"],
+    ["[4,-2,5,3,6], 3", "[5,5,6]"],
+    ["[1,2,3,4], 2", "[2,3,4]"],
+    ["[5,5,5], 2", "[5,5]"]
   ]),
   p("First Missing Positive", "hard", ["array"], {fn:"firstMissingPositive",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an unsorted integer array nums, return the smallest missing positive integer. You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space. The key insight: use the array itself as a hash table by placing each number i at index i-1.",
@@ -934,7 +1279,12 @@ export const problems: Problem[] = [
     ["[3,4,-1,1]", "2", "1 is present but 2 is missing."],
     ["[7,8,9,11,12]", "1"],
     ["[1]", "2"],
-    ["[2]", "1"]
+    ["[2]", "1"],
+    ["[7,8,9,11,12]", "1"],
+    ["[1]", "2"],
+    ["[2]", "1"],
+    ["[1,2,3]", "4"],
+    ["-1,-2,0]", "1"]
   ]),
   p("N Queens Count", "hard", ["backtracking"], {fn:"totalNQueens",ret:"int",params:[{name:"n",type:"int"}]},
     "The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other (no two queens share the same row, column, or diagonal). Given an integer n, return the number of distinct solutions to the n-queens puzzle. Use backtracking with bitmask or set tracking for columns and diagonals.",
@@ -944,12 +1294,22 @@ export const problems: Problem[] = [
     ["1", "1", "A single queen on a 1x1 board is the only solution."],
     ["8", "92"],
     ["5", "10"],
-    ["6", "4"]
+    ["6", "4"],
+    ["8", "92"],
+    ["5", "10"],
+    ["6", "4"],
+    ["7", "40"],
+    ["2", "0"]
   ]),
   p("Word Ladder", "hard", ["bfs","string"], {fn:"ladderLength",ret:"int",params:[{name:"beginWord",type:"string"},{name:"endWord",type:"string"},{name:"wordList",type:"string[]"}]},
     "Given two words `beginWord` and `endWord`, and a `wordList`, return the length of the shortest transformation sequence from `beginWord` to `endWord` (changing one letter at a time, each step must be in wordList; endWord must be in list). Return 0 if no such sequence.",
     "1 <= wordList.length <= 5000",
     [
+    ["\"hit\", \"cog\", [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]", "5"],
+    ["\"hit\", \"cog\", [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]", "0"],
+    ["\"a\", \"c\", [\"a\",\"b\",\"c\"]", "2"],
+    ["\"hot\", \"dog\", [\"hot\",\"dog\"]", "0"],
+    ["\"hot\", \"dog\", [\"hot\",\"dog\",\"dot\"]", "3"],
     ["\"hit\", \"cog\", [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]", "5"],
     ["\"hit\", \"cog\", [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]", "0"],
     ["\"a\", \"c\", [\"a\",\"b\",\"c\"]", "2"],
@@ -964,7 +1324,12 @@ export const problems: Problem[] = [
     ["\"intention\", \"execution\"", "5", "intention -> exention -> exection -> execution. 5 edits total."],
     ["\"\", \"abc\"", "3"],
     ["\"abc\", \"\"", "3"],
-    ["\"abc\", \"abc\"", "0"]
+    ["\"abc\", \"abc\"", "0"],
+    ["\"abc\", \"abc\"", "0"],
+    ["\"abc\", \"axc\"", "1"],
+    ["\"kitten\", \"sitting\"", "3"],
+    ["\"a\", \"\"", "1"],
+    ["\"\", \"\"", "0"]
   ]),
   p("Regular Expression Matching", "hard", ["dp","string"], {fn:"isMatch",ret:"bool",params:[{name:"s",type:"string"},{name:"p",type:"string"}]},
     "Implement regex matching for `.` (any single char) and `*` (0+ of preceding). Match must cover the entire string `s`.",
@@ -974,7 +1339,12 @@ export const problems: Problem[] = [
     ["\"aa\", \"a*\"", "true"],
     ["\"ab\", \".*\"", "true"],
     ["\"aab\", \"c*a*b\"", "true"],
-    ["\"mississippi\", \"mis*is*p*.\"", "false"]
+    ["\"mississippi\", \"mis*is*p*.\"", "false"],
+    ["\"aa\", \"a\"", "false"],
+    ["\"aa\", \"a*\"", "true"],
+    ["\"ab\", \".*\"", "true"],
+    ["\"aab\", \"c*a*b\"", "true"],
+    ["\"a\", \"a\"", "true"]
   ]),
   p("Wildcard Matching", "hard", ["dp","string"], {fn:"isMatch",ret:"bool",params:[{name:"s",type:"string"},{name:"p",type:"string"}]},
     "Implement wildcard matching: `?` matches any single char, `*` matches any sequence (including empty). Match must cover entire `s`.",
@@ -984,7 +1354,12 @@ export const problems: Problem[] = [
     ["\"aa\", \"*\"", "true"],
     ["\"cb\", \"?a\"", "false"],
     ["\"adceb\", \"*a*b\"", "true"],
-    ["\"acdcb\", \"a*c?b\"", "false"]
+    ["\"acdcb\", \"a*c?b\"", "false"],
+    ["\"aa\", \"a\"", "false"],
+    ["\"aa\", \"*\"", "true"],
+    ["\"cb\", \"?a\"", "false"],
+    ["\"adceb\", \"*a*b\"", "true"],
+    ["\"a\", \"a\"", "true"]
   ]),
   p("Longest Valid Parentheses", "hard", ["string","dp","stack"], {fn:"longestValidParentheses",ret:"int",params:[{name:"s",type:"string"}]},
     "Given a string of '(' and ')', return the length of the longest valid (well-formed) parentheses substring.",
@@ -994,6 +1369,11 @@ export const problems: Problem[] = [
     ["\")()())\"", "4"],
     ["\"\"", "0"],
     ["\"()(()\"", "2"],
+    ["\"((()))\"", "6"],
+    ["\"(()\"", "2"],
+    ["\")()(()))\"", "4"],
+    ["\"\"", "0"],
+    ["\"()((())\"", "4"],
     ["\"((()))\"", "6"]
   ]),
   p("Burst Balloons", "hard", ["dp","array"], {fn:"burstBalloons",ret:"int",params:[{name:"nums",type:"int[]"}]},
@@ -1004,7 +1384,12 @@ export const problems: Problem[] = [
     ["[1,5]", "10"],
     ["[5]", "5"],
     ["[1,2,3]", "12"],
-    ["[7,9,8,0,7,1,3,5,5,2]", "1654"]
+    ["[7,9,8,0,7,1,3,5,5,2]", "1654"],
+    ["[3,1,5,8]", "167"],
+    ["[1,5]", "10"],
+    ["[5]", "5"],
+    ["[1,2,3]", "12"],
+    ["[1,1,1]", "3"]
   ]),
   p("Minimum Window Substring", "hard", ["string","sliding window"], {fn:"minWindow",ret:"string",params:[{name:"s",type:"string"},{name:"t",type:"string"}]},
     "Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string. Use the sliding window technique with two pointers and a character frequency map.",
@@ -1014,7 +1399,12 @@ export const problems: Problem[] = [
     ["\"a\", \"a\"", "\"a\"", "The entire string is the window."],
     ["\"a\", \"aa\"", "\"\""],
     ["\"ab\", \"b\"", "\"b\""],
-    ["\"aa\", \"aa\"", "\"aa\""]
+    ["\"aa\", \"aa\"", "\"aa\""],
+    ["\"a\", \"aa\"", "\"\""],
+    ["\"ab\", \"b\"", "\"b\""],
+    ["\"aa\", \"aa\"", "\"aa\""],
+    ["\"cabwefgewcwaefgcf\", \"cae\"", "\"cwae\""],
+    ["\"abc\", \"ac\"", "\"abc\""]
   ]),
   p("Palindrome Partitioning Min Cuts", "hard", ["string","dp"], {fn:"minCut",ret:"int",params:[{name:"s",type:"string"}]},
     "Given a string `s`, return the minimum number of cuts needed to partition `s` such that every substring is a palindrome.",
@@ -1024,7 +1414,12 @@ export const problems: Problem[] = [
     ["\"a\"", "0"],
     ["\"ab\"", "1"],
     ["\"abc\"", "2"],
-    ["\"abacdef\"", "4"]
+    ["\"abacdef\"", "4"],
+    ["\"aab\"", "1"],
+    ["\"a\"", "0"],
+    ["\"ab\"", "1"],
+    ["\"abc\"", "2"],
+    ["\"aba\"", "0"]
   ]),
   p("Distinct Subsequences", "hard", ["dp","string"], {fn:"numDistinct",ret:"int",params:[{name:"s",type:"string"},{name:"t",type:"string"}]},
     "Given strings `s` and `t`, return the number of distinct subsequences of `s` that equal `t`.",
@@ -1034,7 +1429,12 @@ export const problems: Problem[] = [
     ["\"babgbag\", \"bag\"", "5"],
     ["\"abc\", \"\"", "1"],
     ["\"abc\", \"abc\"", "1"],
-    ["\"a\", \"b\"", "0"]
+    ["\"a\", \"b\"", "0"],
+    ["\"rabbbit\", \"rabbit\"", "3"],
+    ["\"babgbag\", \"bag\"", "5"],
+    ["\"abc\", \"abc\"", "1"],
+    ["\"a\", \"b\"", "0"],
+    ["\"aaa\", \"a\"", "3"]
   ]),
   p("Maximal Rectangle", "hard", ["matrix","dp","stack"], {fn:"maximalRectangle",ret:"int",params:[{name:"matrix",type:"string[][]"}]},
     "Given a binary matrix of '0' and '1', return the area of the largest rectangle containing only 1s.",
@@ -1044,7 +1444,12 @@ export const problems: Problem[] = [
     ["[[\"0\"]]", "0"],
     ["[[\"1\"]]", "1"],
     ["[[\"1\",\"1\"],[\"1\",\"1\"]]", "4"],
-    ["[[\"1\",\"0\"],[\"1\",\"1\"]]", "2"]
+    ["[[\"1\",\"0\"],[\"1\",\"1\"]]", "2"],
+    ["[[\"0\"]]", "0"],
+    ["[[\"1\"]]", "1"],
+    ["[[\"1\",\"1\"],[\"1\",\"1\"]]", "4"],
+    ["[[\"1\",\"0\"],[\"1\",\"1\"]]", "2"],
+    ["[[\"0\",\"0\"],[\"0\",\"0\"]]", "0"]
   ]),
   p("Longest Increasing Path", "hard", ["matrix","dfs","dp"], {fn:"longestIncreasingPath",ret:"int",params:[{name:"matrix",type:"int[][]"}]},
     "Given an m x n integer matrix, return the length of the longest strictly increasing path. From any cell, move to 4 neighbors.",
@@ -1054,7 +1459,12 @@ export const problems: Problem[] = [
     ["[[3,4,5],[3,2,6],[2,2,1]]", "4"],
     ["[[1]]", "1"],
     ["[[1,2]]", "2"],
-    ["[[7,8,9],[9,7,6],[7,2,3]]", "6"]
+    ["[[7,8,9],[9,7,6],[7,2,3]]", "6"],
+    ["[[9,9,4],[6,6,8],[2,1,1]]", "4"],
+    ["[[3,4,5],[3,2,6],[2,2,1]]", "4"],
+    ["[[1]]", "1"],
+    ["[[1,2]]", "2"],
+    ["[[1,2,3],[6,5,4],[7,8,9]]", "9"]
   ]),
   p("Word Search II", "hard", ["matrix","trie","dfs"], {fn:"findWords",ret:"string[]",params:[{name:"board",type:"string[][]"},{name:"words",type:"string[]"}]},
     "Given an m x n `board` and list of `words`, return all words present in the board (formed by adjacent letters horizontally/vertically, no cell reused per word). Sorted ascending.",
@@ -1064,6 +1474,11 @@ export const problems: Problem[] = [
     ["[[\"a\",\"b\"],[\"c\",\"d\"]], [\"abcb\"]", "[]"],
     ["[[\"a\"]], [\"a\"]", "[\"a\"]"],
     ["[[\"a\",\"b\"],[\"c\",\"d\"]], [\"ab\",\"cd\",\"ac\",\"db\"]", "[\"ab\",\"ac\",\"cd\",\"db\"]"],
+    ["[[\"a\",\"a\"]], [\"aaa\"]", "[]"],
+    ["[[\"a\"]], [\"a\"]", "[\"a\"]"],
+    ["[[\"a\",\"b\"],[\"c\",\"d\"]], [\"abcb\"]", "[]"],
+    ["[[\"a\",\"b\"],[\"c\",\"d\"]], [\"abdc\"]", "[\"abdc\"]"],
+    ["[[\"a\"]], [\"b\"]", "[]"],
     ["[[\"a\",\"a\"]], [\"aaa\"]", "[]"]
   ]),
   p("Find Median From Stream", "hard", ["heap","design"], {fn:"medianStream",ret:"double[]",params:[{name:"nums",type:"int[]"}]},
@@ -1074,7 +1489,12 @@ export const problems: Problem[] = [
     ["[5,15,1,3]", "[5,10,5,4]"],
     ["[1]", "[1]"],
     ["[2,2,2,2]", "[2,2,2,2]"],
-    ["[1,3,5,7,9]", "[1,2,3,4,5]"]
+    ["[1,3,5,7,9]", "[1,2,3,4,5]"],
+    ["[1,2,3]", "[1,1.5,2]"],
+    ["[5,15,1,3]", "[5,10,5,4]"],
+    ["[1]", "[1]"],
+    ["[2,2,2,2]", "[2,2,2,2]"],
+    ["[10,20,30,40,50]", "[10,15,20,25,30]"]
   ]),
   p("Russian Doll Envelopes", "hard", ["dp","binary search"], {fn:"maxEnvelopes",ret:"int",params:[{name:"envelopes",type:"int[][]"}]},
     "Given a 2D array of `envelopes` [w,h], return the maximum number of envelopes you can nest (one fits in another if both w and h are strictly smaller).",
@@ -1084,12 +1504,22 @@ export const problems: Problem[] = [
     ["[[1,1],[1,1],[1,1]]", "1"],
     ["[[1,2],[2,3],[3,4]]", "3"],
     ["[[4,5],[4,6],[6,7],[2,3],[1,1]]", "4"],
-    ["[[2,100],[3,200],[4,300],[5,500],[5,400],[5,250],[6,370],[6,360],[7,380]]", "5"]
+    ["[[2,100],[3,200],[4,300],[5,500],[5,400],[5,250],[6,370],[6,360],[7,380]]", "5"],
+    ["[[5,4],[6,4],[6,7],[2,3]]", "3"],
+    ["[[1,1],[1,1],[1,1]]", "1"],
+    ["[[1,2],[2,3],[3,4]]", "3"],
+    ["[[4,5],[4,6],[6,7],[2,3],[1,1]]", "4"],
+    ["[[1,3],[3,5],[6,7],[6,8],[8,4],[9,5]]", "3"]
   ]),
   p("Longest Substring K Distinct", "hard", ["string","sliding window","hash"], {fn:"lengthOfLongestSubstringKDistinct",ret:"int",params:[{name:"s",type:"string"},{name:"k",type:"int"}]},
     "Given a string `s` and integer `k`, return the length of the longest substring containing at most `k` distinct characters.",
     "1 <= s.length <= 5*10^4",
     [
+    ["\"eceba\", 2", "3"],
+    ["\"aa\", 1", "2"],
+    ["\"a\", 0", "0"],
+    ["\"abcabcabc\", 2", "2"],
+    ["\"abaccc\", 2", "4"],
     ["\"eceba\", 2", "3"],
     ["\"aa\", 1", "2"],
     ["\"a\", 0", "0"],
@@ -1104,7 +1534,12 @@ export const problems: Problem[] = [
     ["[1,2,3,4,5]", "4"],
     ["[7,6,4,3,1]", "0"],
     ["[1]", "0"],
-    ["[6,1,3,2,4,7]", "9"]
+    ["[6,1,3,2,4,7]", "9"],
+    ["[3,3,5,0,0,3,1,4]", "8"],
+    ["[1,2,3,4,5]", "4"],
+    ["[7,6,4,3,1]", "0"],
+    ["[1]", "0"],
+    ["[1,2,4,2,5,7,2,4,9,0]", "15"]
   ]),
   p("Recover BST Inorder", "hard", ["array","tree"], {fn:"recoverTree",ret:"int[]",params:[{name:"inorder",type:"int[]"}]},
     "Two values in a sorted (BST inorder traversal) array `inorder` were swapped. Recover the sorted array (in place) and return it.",
@@ -1114,7 +1549,12 @@ export const problems: Problem[] = [
     ["[3,2,1]", "[1,2,3]"],
     ["[1,2,3]", "[1,2,3]"],
     ["[5,1,3,4,2]", "[1,2,3,4,5]"],
-    ["[1,4,3,2,5]", "[1,2,3,4,5]"]
+    ["[1,4,3,2,5]", "[1,2,3,4,5]"],
+    ["[1,3,2,4]", "[1,2,3,4]"],
+    ["[3,2,1]", "[1,2,3]"],
+    ["[1,2,3]", "[1,2,3]"],
+    ["[5,1,3,4,2]", "[1,2,3,4,5]"],
+    ["[2,1]", "[1,2]"]
   ]),
   p("Count Smaller After Self", "hard", ["array","merge sort"], {fn:"countSmaller",ret:"int[]",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array `nums`, return an array `counts` where counts[i] is the number of smaller elements to the right of nums[i].",
@@ -1124,12 +1564,22 @@ export const problems: Problem[] = [
     ["[-1]", "[0]"],
     ["[-1,-1]", "[0,0]"],
     ["[2,0,1]", "[2,0,0]"],
+    ["[1,2,3,4]", "[0,0,0,0]"],
+    ["[5,2,6,1]", "[2,1,1,0]"],
+    ["-1]", "[0]"],
+    ["-1,-1]", "[0,0]"],
+    ["[2,0,1]", "[2,0,0]"],
     ["[1,2,3,4]", "[0,0,0,0]"]
   ]),
   p("Reverse Pairs", "hard", ["array","merge sort"], {fn:"reversePairs",ret:"int",params:[{name:"nums",type:"int[]"}]},
     "Given an integer array `nums`, return the number of pairs (i, j) where i < j and nums[i] > 2 * nums[j].",
     "1 <= nums.length <= 5*10^4",
     [
+    ["[1,3,2,3,1]", "2"],
+    ["[2,4,3,5,1]", "3"],
+    ["[1,2,3]", "0"],
+    ["[5,4,3,2,1]", "4"],
+    ["[10,1,1,1]", "3"],
     ["[1,3,2,3,1]", "2"],
     ["[2,4,3,5,1]", "3"],
     ["[1,2,3]", "0"],
