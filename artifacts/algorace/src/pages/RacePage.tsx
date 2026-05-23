@@ -183,7 +183,7 @@ interface WinnerData {
 
   if (!match) return null;
 
-  const totalTests = match.problem.examples.length + 5;
+  const totalTests = 10;
 
   // Shared problem description content
   const ProblemContent = () => (
