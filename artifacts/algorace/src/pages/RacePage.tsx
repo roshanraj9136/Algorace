@@ -66,6 +66,7 @@ interface WinnerData {
   const [winnerData, setWinnerData] = useState<WinnerData | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [mobileTab, setMobileTab] = useState<"problem" | "code" | "results">("code");
+  const [activeTab, setActiveTab] = useState("description");
 
   useEffect(() => {
     if (match?.problem) {
@@ -148,6 +149,8 @@ interface WinnerData {
     }, {
       onSuccess: (res) => {
         setResults(res.results);
+        setActiveTab("results");
+        setMobileTab("results");
         if (res.allPassed) {
           toast({
             title: "Success!",
@@ -313,7 +316,7 @@ interface WinnerData {
       {/* ===== DESKTOP LAYOUT (md+) ===== */}
       <div className="flex-1 hidden md:flex overflow-hidden">
         <div className="w-1/2 border-r flex flex-col overflow-hidden bg-card/30">
-          <Tabs defaultValue="description" className="flex-1 flex flex-col">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <TabsList className="px-4 border-b rounded-none bg-transparent">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="results">Test Results ({results.filter(r => r.passed).length}/{results.length})</TabsTrigger>

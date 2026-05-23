@@ -274,11 +274,6 @@ export const problems: Problem[] = [
     ["\"  space  \"", "5"],
     ["\"two words\"", "5"],
     ["\"a b c d e\"", "1"],
-    ["\"longword\"", "8"],
-    ["\"day\"", "3"],
-    ["\"  space  \"", "5"],
-    ["\"two words\"", "5"],
-    ["\"a b c d e\"", "1"],
     ["\"longword\"", "8"]
   ]),
   p("FizzBuzz", "easy", ["array","math","string"], {fn:"fizzBuzz",ret:"string[]",params:[{name:"n",type:"int"}]},
