@@ -6,9 +6,11 @@ export function requireEnv(name: string): string {
   return value;
 }
 
-export function getCorsOrigin(): string {
+export function getCorsOrigin(): string | true {
   if (process.env["NODE_ENV"] === "production") {
     return requireEnv("CORS_ORIGIN");
   }
-  return process.env["CORS_ORIGIN"] || "*";
+  const explicit = process.env["CORS_ORIGIN"];
+  if (explicit) return explicit;
+  return true;
 }

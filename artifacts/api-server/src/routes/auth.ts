@@ -5,10 +5,19 @@ import { usersTable } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
 import { signToken } from "../lib/jwt";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
 
-router.post("/register", async (req, res) => {
+const authLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many requests, please try again later" },
+});
+
+router.post("/register", authLimiter, async (req, res) => {
   const { email, name, password } = req.body as {
     email?: string;
     name?: string;
@@ -22,6 +31,11 @@ router.post("/register", async (req, res) => {
 
   if (password.length < 6) {
     res.status(400).json({ error: "Password must be at least 6 characters" });
+    return;
+  }
+
+  if (password.length > 128) {
+    res.status(400).json({ error: "Password must be at most 128 characters" });
     return;
   }
 
@@ -55,7 +69,7 @@ router.post("/register", async (req, res) => {
   });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
   const { email, password } = req.body as {
     email?: string;
     password?: string;

@@ -7,7 +7,7 @@ import {
   matchPlayersTable,
   problemsTable,
 } from "@workspace/db/schema";
-import { and, eq, ne, or, ilike, sql } from "drizzle-orm";
+import { and, eq, ne, or, ilike, sql, inArray } from "drizzle-orm";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { nanoid } from "nanoid";
 import { getIo } from "./socket-ref";
@@ -306,11 +306,11 @@ router.get("/search", requireAuth, async (req, res) => {
           or(
             and(
               eq(friendshipsTable.requesterId, authReq.userId),
-              sql`${friendshipsTable.addresseeId} IN ${otherIds}`
+              inArray(friendshipsTable.addresseeId, otherIds)
             ),
             and(
               eq(friendshipsTable.addresseeId, authReq.userId),
-              sql`${friendshipsTable.requesterId} IN ${otherIds}`
+              inArray(friendshipsTable.requesterId, otherIds)
             )
           )
         )

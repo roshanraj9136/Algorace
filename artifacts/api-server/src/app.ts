@@ -7,6 +7,8 @@ import { getCorsOrigin } from "./lib/env";
 
 const app: Express = express();
 
+app.set("trust proxy", 1);
+
 const corsOrigin = getCorsOrigin();
 
 app.use(
