@@ -6,7 +6,7 @@ import {
   usersTable,
   problemsTable,
 } from "@workspace/db/schema";
-import { eq, and, or } from "drizzle-orm";
+import { eq, and, or, sql } from "drizzle-orm";
 import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { nanoid } from "nanoid";
 import { getIo } from "./socket-ref";
@@ -33,7 +33,8 @@ router.get("/", requireAuth, async (req, res) => {
         eq(matchesTable.player2Id, authReq.userId)
       )
     )
-    .orderBy(matchesTable.createdAt);
+    .orderBy(matchesTable.createdAt)
+    .limit(50);
 
   const formatted = rows.map((row) => ({
     id: row.id,
@@ -60,7 +61,7 @@ router.post("/", requireAuth, async (req, res) => {
     const [rnd] = await db
       .select({ id: problemsTable.id })
       .from(problemsTable)
-      .orderBy(problemsTable.id)
+      .orderBy(sql`random()`)
       .limit(1);
     if (!rnd) {
       res.status(400).json({ error: "No problems available" });

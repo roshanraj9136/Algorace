@@ -63,7 +63,22 @@ function pickClosestPair(): [QueueEntry, QueueEntry] | null {
   return [sorted[bestI]!, sorted[bestI + 1]!];
 }
 
+let matching = false;
+
 export async function tryMatchPlayers(): Promise<{
+  matchId: number;
+  playerIds: [number, number];
+} | null> {
+  if (matching) return null;
+  matching = true;
+  try {
+    return await doMatch();
+  } finally {
+    matching = false;
+  }
+}
+
+async function doMatch(): Promise<{
   matchId: number;
   playerIds: [number, number];
 } | null> {

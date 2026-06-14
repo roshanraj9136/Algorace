@@ -12,10 +12,19 @@ import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { runTestCases } from "../services/piston";
 import { computeElo } from "../lib/elo";
 import { getIo } from "./socket-ref";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
 
-router.post("/", requireAuth, async (req, res) => {
+const executionLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many submissions, please try again later" },
+});
+
+router.post("/", requireAuth, executionLimiter, async (req, res) => {
   const authReq = req as AuthRequest;
   const { matchId, language, code } = req.body as {
     matchId?: number;
@@ -25,6 +34,11 @@ router.post("/", requireAuth, async (req, res) => {
 
   if (!matchId || !language || !code) {
     res.status(400).json({ error: "matchId, language, and code are required" });
+    return;
+  }
+
+  if (code.length > 50_000) {
+    res.status(400).json({ error: "Code must be under 50KB" });
     return;
   }
 

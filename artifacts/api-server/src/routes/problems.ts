@@ -4,8 +4,17 @@ import { problemsTable } from "@workspace/db/schema";
 import { eq, ilike, sql, and, type SQL } from "drizzle-orm";
 import { requireAuth } from "../middleware/auth";
 import { runTestCases } from "../services/piston";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
+
+const runLimiter = rateLimit({
+  windowMs: 60_000,
+  limit: 15,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many code runs, please try again later" },
+});
 
 router.get("/", requireAuth, async (req, res) => {
   const { difficulty, tag, search } = req.query as {
@@ -23,7 +32,8 @@ router.get("/", requireAuth, async (req, res) => {
   }
 
   if (search) {
-    conditions.push(ilike(problemsTable.title, `%${search}%`));
+    const escaped = search.replace(/%/g, "\\%").replace(/_/g, "\\_");
+    conditions.push(ilike(problemsTable.title, `%${escaped}%`));
   }
 
   const baseQuery = db
@@ -97,7 +107,7 @@ router.get("/:id", requireAuth, async (req, res) => {
   });
 });
 
-router.post("/:id/run", requireAuth, async (req, res) => {
+router.post("/:id/run", requireAuth, runLimiter, async (req, res) => {
   const id = Number(req.params["id"]);
   if (isNaN(id)) {
     res.status(400).json({ error: "Invalid problem id" });
@@ -116,6 +126,11 @@ router.post("/:id/run", requireAuth, async (req, res) => {
 
   if (!code) {
     res.status(400).json({ error: "code is required" });
+    return;
+  }
+
+  if (code.length > 50_000) {
+    res.status(400).json({ error: "Code must be under 50KB" });
     return;
   }
 

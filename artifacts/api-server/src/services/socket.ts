@@ -5,6 +5,9 @@ import { setIo } from "../routes/socket-ref";
 import { removeUserFromQueue } from "./matchmaking";
 import { startDisconnectGrace, cancelDisconnectGrace } from "./disconnect";
 import { getCorsOrigin } from "../lib/env";
+import { db } from "@workspace/db";
+import { matchesTable } from "@workspace/db/schema";
+import { eq, or } from "drizzle-orm";
 
 const corsOrigin = getCorsOrigin();
 
@@ -40,7 +43,14 @@ export function createSocketServer(httpServer: HttpServer): SocketServer {
 
     socket.join(`user:${userId}`);
 
-    socket.on("match:join", (data: { matchId: number }) => {
+    socket.on("match:join", async (data: { matchId: number }) => {
+      if (!data?.matchId || typeof data.matchId !== "number") return;
+      const [match] = await db
+        .select({ player1Id: matchesTable.player1Id, player2Id: matchesTable.player2Id })
+        .from(matchesTable)
+        .where(eq(matchesTable.id, data.matchId))
+        .limit(1);
+      if (!match || (match.player1Id !== userId && match.player2Id !== userId)) return;
       socket.join(`match:${data.matchId}`);
       cancelDisconnectGrace(userId, data.matchId);
     });

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "wouter";
 import { 
   useGetMatch, 
@@ -7,17 +7,14 @@ import {
 } from "@workspace/api-client-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSocket } from "@/hooks/useSocket";
-import { Navbar } from "@/components/Navbar";
 import { DifficultyBadge } from "@/components/DifficultyBadge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Editor from "@monaco-editor/react";
-import { Play, Send, Trophy, Swords, Timer, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { Play, Send, Trophy, Timer, CheckCircle2, XCircle } from "lucide-react";
 
 export default function RacePage() {
   const { matchId: matchIdParam } = useParams<{ matchId: string }>();

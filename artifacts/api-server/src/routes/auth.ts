@@ -29,6 +29,11 @@ router.post("/register", authLimiter, async (req, res) => {
     return;
   }
 
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    res.status(400).json({ error: "Invalid email format" });
+    return;
+  }
+
   if (password.length < 6) {
     res.status(400).json({ error: "Password must be at least 6 characters" });
     return;
