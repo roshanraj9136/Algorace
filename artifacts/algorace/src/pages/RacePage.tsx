@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Editor from "@monaco-editor/react";
-import { Play, Send, Trophy, Timer, CheckCircle2, XCircle } from "lucide-react";
+import { Play, Send, Trophy, Timer, CheckCircle2, XCircle, ArrowLeft } from "lucide-react";
 
 export default function RacePage() {
   const { matchId: matchIdParam } = useParams<{ matchId: string }>();
@@ -37,23 +37,23 @@ export default function RacePage() {
 
   const { mutate: submitCode, isPending: isSubmitting } = useSubmitCode();
 
-interface TestCaseResult {
-  passed: boolean;
-  expectedOutput: string;
-  actualOutput: string;
-  error: string | null;
-}
+  interface TestCaseResult {
+    passed: boolean;
+    expectedOutput: string;
+    actualOutput: string;
+    error: string | null;
+  }
 
-interface OpponentProgress {
-  userId: number;
-  testsPassedCount: number;
-}
+  interface OpponentProgress {
+    userId: number;
+    testsPassedCount: number;
+  }
 
-interface WinnerData {
-  winnerId: number;
-  eloChange: number;
-  reason?: string;
-}
+  interface WinnerData {
+    winnerId: number;
+    eloChange: number;
+    reason?: string;
+  }
 
   const [language, setLanguage] = useState<"cpp" | "java">("cpp");
   const [code, setCode] = useState("");
@@ -181,133 +181,177 @@ interface WinnerData {
   if (!match) return null;
 
   const totalTests = 10;
+  const myPassed = myProgress?.testsPassedCount || 0;
+  const oppPassed = opponentProgress?.testsPassedCount ?? (opponent?.testsPassedCount || 0);
 
-  // Shared problem description content
   const ProblemContent = () => (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <div className="prose prose-invert max-w-none break-words">
-        <p className="text-[15px] leading-relaxed text-foreground/90">{match.problem.description}</p>
+        <p className="text-sm leading-relaxed text-foreground/90">{match.problem.description}</p>
       </div>
 
       {match.problem.examples.map((example, i) => (
-        <div key={i} className="space-y-2 max-w-full min-w-0">
-          <h3 className="font-semibold text-sm text-foreground">Example {i + 1}:</h3>
-          <div className="bg-muted/50 rounded-lg border border-border/60 p-3 sm:p-4 space-y-2 font-mono text-xs sm:text-sm overflow-x-auto">
-            <div className="whitespace-pre">
+        <div key={i} className="space-y-1.5">
+          <h3 className="font-semibold text-xs text-foreground">Example {i + 1}:</h3>
+          <div className="bg-muted/50 rounded-lg border border-border/60 p-3 space-y-1.5 font-mono text-xs overflow-x-auto">
+            <div className="whitespace-pre-wrap break-all">
               <span className="text-muted-foreground">Input: </span>
               <span className="text-foreground">{example.input}</span>
             </div>
-            <div className="whitespace-pre">
+            <div className="whitespace-pre-wrap break-all">
               <span className="text-muted-foreground">Output: </span>
               <span className="text-foreground">{example.output}</span>
             </div>
             {example.explanation && (
-              <div className="pt-2 mt-2 border-t border-border/40 whitespace-normal">
+              <div className="pt-1.5 mt-1.5 border-t border-border/40">
                 <span className="text-muted-foreground">Explanation: </span>
-                <span className="text-foreground/80 font-sans text-[13px]">{example.explanation}</span>
+                <span className="text-foreground/80 font-sans text-xs">{example.explanation}</span>
               </div>
             )}
           </div>
         </div>
       ))}
 
-      <div className="space-y-3 max-w-full">
-        <h3 className="font-semibold text-sm text-foreground">Constraints:</h3>
-        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+      <div className="space-y-2">
+        <h3 className="font-semibold text-xs text-foreground">Constraints:</h3>
+        <ul className="list-disc list-inside space-y-0.5 text-xs text-muted-foreground">
           {match.problem.constraints.split("\n").map((c, i) => (
-            <li key={i} className="font-mono text-[13px] break-words whitespace-pre-wrap">{c}</li>
+            <li key={i} className="font-mono text-[11px] break-words whitespace-pre-wrap">{c}</li>
           ))}
         </ul>
       </div>
     </div>
   );
 
-  // Shared test results content
   const ResultsContent = () => (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {results.length > 0 ? (
         results.map((res, i) => (
-          <div key={i} className={`p-3 sm:p-4 rounded-lg border ${res.passed ? 'bg-success/5 border-success/20' : 'bg-destructive/5 border-destructive/20'}`}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2 font-bold text-sm">
-                {res.passed ? <CheckCircle2 className="text-success w-4 h-4" /> : <XCircle className="text-destructive w-4 h-4" />}
-                Test Case {i + 1}
+          <div key={i} className={`p-3 rounded-lg border ${res.passed ? 'bg-success/5 border-success/20' : 'bg-destructive/5 border-destructive/20'}`}>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5 font-bold text-xs">
+                {res.passed ? <CheckCircle2 className="text-success w-3.5 h-3.5" /> : <XCircle className="text-destructive w-3.5 h-3.5" />}
+                Test {i + 1}
               </div>
-              <div className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded ${res.passed ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
-                {res.passed ? 'Passed' : 'Failed'}
+              <div className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${res.passed ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
+                {res.passed ? 'Pass' : 'Fail'}
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono w-full">
-              <div className="space-y-1 min-w-0">
-                <div className="text-muted-foreground">Expected</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto whitespace-pre">{res.expectedOutput}</pre>
+            <div className="space-y-2 text-[11px] font-mono">
+              <div className="space-y-0.5">
+                <div className="text-muted-foreground text-[10px]">Expected</div>
+                <pre className="bg-background p-1.5 rounded overflow-x-auto max-h-20 overflow-y-auto whitespace-pre text-[11px]">{res.expectedOutput}</pre>
               </div>
-              <div className="space-y-1 min-w-0">
-                <div className="text-muted-foreground">Actual</div>
-                <pre className="bg-background p-2 rounded overflow-x-auto max-h-32 overflow-y-auto whitespace-pre">{res.actualOutput}</pre>
+              <div className="space-y-0.5">
+                <div className="text-muted-foreground text-[10px]">Actual</div>
+                <pre className="bg-background p-1.5 rounded overflow-x-auto max-h-20 overflow-y-auto whitespace-pre text-[11px]">{res.actualOutput}</pre>
               </div>
             </div>
             {res.error && (
-              <div className="mt-3 p-2 bg-destructive/10 text-destructive rounded text-xs font-mono whitespace-pre-wrap break-all max-h-48 overflow-y-auto">
+              <div className="mt-2 p-1.5 bg-destructive/10 text-destructive rounded text-[11px] font-mono whitespace-pre-wrap break-all max-h-32 overflow-y-auto">
                 {res.error}
               </div>
             )}
           </div>
         ))
       ) : (
-        <div className="h-40 sm:h-64 flex flex-col items-center justify-center text-muted-foreground gap-2 border border-dashed rounded-lg">
-          <Play className="w-8 h-8 opacity-20" />
-          Submit your code to see results
+        <div className="h-40 flex flex-col items-center justify-center text-muted-foreground gap-2 border border-dashed rounded-lg">
+          <Play className="w-6 h-6 opacity-20" />
+          <span className="text-xs">Submit your code to see results</span>
         </div>
       )}
     </div>
   );
 
   return (
-    <div className="h-screen flex flex-col bg-background">
-      {/* Header Bar */}
-      <div className="border-b bg-card px-3 sm:px-4 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-          <Button variant="ghost" size="sm" onClick={() => setLocation("/")} data-testid="button-back" className="shrink-0">
+    <div className="h-[100dvh] flex flex-col bg-background">
+      {/* ===== MOBILE HEADER ===== */}
+      <div className="md:hidden border-b bg-card">
+        {/* Top row: back + title + timer */}
+        <div className="flex items-center justify-between px-3 py-2">
+          <button onClick={() => setLocation("/")} className="p-1.5 -ml-1.5 rounded-md hover:bg-muted" aria-label="Exit">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          <div className="flex-1 text-center min-w-0 px-2">
+            <h1 className="font-bold text-sm truncate">{match.problem.title}</h1>
+          </div>
+          {match.status === "active" ? (
+            <div className="font-mono text-sm font-bold text-primary tabular-nums">
+              {formatTime(elapsed)}
+            </div>
+          ) : (
+            <DifficultyBadge difficulty={match.problem.difficulty} />
+          )}
+        </div>
+
+        {/* Progress bars row */}
+        <div className="flex items-center gap-2 px-3 pb-2">
+          <MobileProgress 
+            name={user?.name || "You"} 
+            passed={myPassed} 
+            total={totalTests} 
+            isMe 
+          />
+          <span className="text-[10px] text-muted-foreground font-bold">VS</span>
+          <MobileProgress 
+            name={opponent?.name || "Waiting..."} 
+            passed={oppPassed} 
+            total={totalTests} 
+          />
+        </div>
+
+        {/* Invite code for waiting state */}
+        {match.status === "waiting" && (
+          <div className="flex items-center justify-center gap-2 px-3 pb-2">
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Invite:</span>
+            <code className="bg-muted px-2 py-0.5 rounded text-xs font-bold text-primary select-all tracking-wider">{match.inviteCode}</code>
+          </div>
+        )}
+      </div>
+
+      {/* ===== DESKTOP HEADER ===== */}
+      <div className="hidden md:flex border-b bg-card px-4 py-2 items-center justify-between">
+        <div className="flex items-center gap-4 min-w-0">
+          <Button variant="ghost" size="sm" onClick={() => setLocation("/")} data-testid="button-back">
             Exit
           </Button>
-          <div className="h-6 w-px bg-border hidden sm:block" />
-          <h1 className="font-bold flex items-center gap-2 text-sm sm:text-base truncate">
+          <div className="h-6 w-px bg-border" />
+          <h1 className="font-bold flex items-center gap-2 text-base truncate">
             {match.problem.title}
             <DifficultyBadge difficulty={match.problem.difficulty} />
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-8 flex-wrap">
+        <div className="flex items-center gap-8">
           {match.status === "active" && (
-            <div className="flex items-center gap-2 font-mono text-lg sm:text-xl text-primary" data-testid="text-timer">
-              <Timer className="w-4 h-4 sm:w-5 sm:h-5" />
+            <div className="flex items-center gap-2 font-mono text-xl text-primary" data-testid="text-timer">
+              <Timer className="w-5 h-5" />
               {formatTime(elapsed)}
             </div>
           )}
 
-          <div className="flex items-center gap-3 sm:gap-6">
-            <PlayerProgress 
+          <div className="flex items-center gap-6">
+            <DesktopProgress 
               name={user?.name || "You"} 
-              passed={myProgress?.testsPassedCount || 0} 
+              passed={myPassed} 
               total={totalTests} 
               isMe
             />
-            <div className="h-6 sm:h-8 w-px bg-border" />
-            <PlayerProgress 
+            <div className="h-8 w-px bg-border" />
+            <DesktopProgress 
               name={opponent?.name || "Waiting..."} 
-              passed={opponentProgress?.testsPassedCount ?? (opponent?.testsPassedCount || 0)} 
+              passed={oppPassed} 
               total={totalTests} 
             />
           </div>
-        </div>
 
-        {match.status === "waiting" && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Invite Code:</span>
-            <code className="bg-muted px-2 py-1 rounded font-bold text-primary select-all">{match.inviteCode}</code>
-          </div>
-        )}
+          {match.status === "waiting" && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Invite:</span>
+              <code className="bg-muted px-2 py-1 rounded font-bold text-primary select-all">{match.inviteCode}</code>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ===== DESKTOP LAYOUT (md+) ===== */}
@@ -340,18 +384,16 @@ interface WinnerData {
                 <SelectItem value="java">Java</SelectItem>
               </SelectContent>
             </Select>
-            <div className="flex items-center gap-2">
-              <Button 
-                size="sm" 
-                className="font-bold gap-2" 
-                onClick={handleSubmit} 
-                disabled={isSubmitting || match.status !== 'active'}
-                data-testid="button-submit"
-              >
-                <Send className="w-4 h-4" />
-                SUBMIT
-              </Button>
-            </div>
+            <Button 
+              size="sm" 
+              className="font-bold gap-2" 
+              onClick={handleSubmit} 
+              disabled={isSubmitting || match.status !== 'active'}
+              data-testid="button-submit"
+            >
+              <Send className="w-4 h-4" />
+              SUBMIT
+            </Button>
           </div>
           <div className="flex-1 relative">
             <Editor
@@ -377,39 +419,35 @@ interface WinnerData {
       {/* ===== MOBILE LAYOUT (below md) ===== */}
       <div className="flex-1 flex flex-col md:hidden overflow-hidden">
         {/* Mobile Tab Bar */}
-        <div className="border-b bg-card/50 flex">
-          <button
-            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'problem' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
-            onClick={() => setMobileTab('problem')}
-          >
-            Problem
-          </button>
-          <button
-            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'code' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
-            onClick={() => setMobileTab('code')}
-          >
-            Code
-          </button>
-          <button
-            className={`flex-1 py-2.5 text-xs font-bold uppercase tracking-wider transition-colors ${mobileTab === 'results' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground'}`}
-            onClick={() => setMobileTab('results')}
-          >
-            Results ({results.filter(r => r.passed).length}/{results.length})
-          </button>
+        <div className="border-b bg-card/80 flex shrink-0">
+          {(["problem", "code", "results"] as const).map((tab) => (
+            <button
+              key={tab}
+              className={`flex-1 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors relative ${
+                mobileTab === tab ? 'text-primary' : 'text-muted-foreground'
+              }`}
+              onClick={() => setMobileTab(tab)}
+            >
+              {tab === "results" ? `Results (${results.filter(r => r.passed).length}/${results.length})` : tab}
+              {mobileTab === tab && (
+                <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary rounded-full" />
+              )}
+            </button>
+          ))}
         </div>
 
         {/* Mobile Content */}
         {mobileTab === 'problem' && (
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 pb-6">
             <ProblemContent />
           </div>
         )}
 
         {mobileTab === 'code' && (
-          <div className="flex-1 flex flex-col">
-            <div className="border-b px-3 py-2 flex items-center justify-between bg-card/50">
+          <div className="flex-1 flex flex-col min-h-0">
+            <div className="border-b px-3 py-2 flex items-center justify-between bg-card/50 shrink-0">
               <Select value={language} onValueChange={(val) => setLanguage(val as "cpp" | "java")}>
-                <SelectTrigger className="w-24 h-8 text-xs font-bold">
+                <SelectTrigger className="w-20 h-8 text-[11px] font-bold">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -419,13 +457,19 @@ interface WinnerData {
               </Select>
               <Button 
                 size="sm" 
-                className="font-bold gap-1.5 text-xs" 
+                className="font-bold gap-1.5 text-xs h-8 px-3" 
                 onClick={handleSubmit} 
                 disabled={isSubmitting || match.status !== 'active'}
                 data-testid="button-submit-mobile"
               >
-                <Send className="w-3.5 h-3.5" />
-                SUBMIT
+                {isSubmitting ? (
+                  <span className="animate-pulse">...</span>
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" />
+                    SUBMIT
+                  </>
+                )}
               </Button>
             </div>
             <div className="flex-1 relative min-h-0">
@@ -442,8 +486,11 @@ interface WinnerData {
                   lineNumbers: "on",
                   scrollBeyondLastLine: false,
                   automaticLayout: true,
-                  padding: { top: 12, bottom: 12 },
+                  padding: { top: 8, bottom: 8 },
                   wordWrap: "on",
+                  lineNumbersMinChars: 3,
+                  folding: false,
+                  glyphMargin: false,
                 }}
               />
             </div>
@@ -451,39 +498,40 @@ interface WinnerData {
         )}
 
         {mobileTab === 'results' && (
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-3 pb-6">
             <ResultsContent />
           </div>
         )}
       </div>
 
+      {/* Winner Modal */}
       <Dialog open={showWinnerModal} onOpenChange={setShowWinnerModal}>
-        <DialogContent className="sm:max-w-md text-center max-w-[90vw]">
+        <DialogContent className="sm:max-w-md text-center max-w-[85vw] rounded-2xl">
           <DialogHeader>
-            <div className="flex justify-center mb-4">
-              <div className="p-4 bg-primary/10 rounded-full">
-                <Trophy className="w-12 h-12 text-primary" />
+            <div className="flex justify-center mb-3">
+              <div className="p-3 bg-primary/10 rounded-full">
+                <Trophy className="w-10 h-10 text-primary" />
               </div>
             </div>
-            <DialogTitle className="text-2xl sm:text-3xl font-bold">Race Finished!</DialogTitle>
-            <DialogDescription className="text-base sm:text-lg">
+            <DialogTitle className="text-xl sm:text-3xl font-bold">Race Finished!</DialogTitle>
+            <DialogDescription className="text-sm sm:text-lg">
               {winnerData?.winnerId === user?.id ? (
-                <span className="text-success font-bold">VICTORY! You won the race!</span>
+                <span className="text-success font-bold">VICTORY! You won! 🎉</span>
               ) : (
-                <span className="text-destructive font-bold">DEFEAT. Better luck next time.</span>
+                <span className="text-destructive font-bold">DEFEAT. Next time! 💪</span>
               )}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4 sm:py-6 flex justify-center gap-12">
+          <div className="py-4 flex justify-center">
             <div className="text-center">
-              <div className="text-sm uppercase tracking-widest text-muted-foreground mb-1">Rating Change</div>
+              <div className="text-xs uppercase tracking-widest text-muted-foreground mb-1">Rating Change</div>
               <div className={`text-3xl sm:text-4xl font-black ${(winnerData?.eloChange ?? 0) >= 0 ? 'text-success' : 'text-destructive'}`}>
                 {(winnerData?.eloChange ?? 0) >= 0 ? '+' : ''}{winnerData?.eloChange ?? 0}
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button className="w-full" onClick={() => setLocation("/")}>Back to Dashboard</Button>
+            <Button className="w-full h-11" onClick={() => setLocation("/")}>Back to Dashboard</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -491,16 +539,37 @@ interface WinnerData {
   );
 }
 
-function PlayerProgress({ name, passed, total, isMe }: { name: string; passed: number; total: number; isMe?: boolean }) {
+function MobileProgress({ name, passed, total, isMe }: { name: string; passed: number; total: number; isMe?: boolean }) {
   const percentage = Math.min(100, (passed / total) * 100);
   
   return (
-    <div className="w-28 sm:w-48 space-y-1">
-      <div className="flex justify-between text-[9px] sm:text-[10px] uppercase font-bold tracking-tighter">
+    <div className="flex-1 min-w-0">
+      <div className="flex justify-between items-baseline mb-0.5">
+        <span className={`text-[10px] font-bold truncate ${isMe ? 'text-primary' : 'text-muted-foreground'}`}>
+          {name}
+        </span>
+        <span className="text-[10px] font-mono font-bold shrink-0 ml-1">{passed}/{total}</span>
+      </div>
+      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+        <div 
+          className={`h-full rounded-full transition-all duration-500 ${isMe ? 'bg-primary' : 'bg-muted-foreground/60'}`} 
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function DesktopProgress({ name, passed, total, isMe }: { name: string; passed: number; total: number; isMe?: boolean }) {
+  const percentage = Math.min(100, (passed / total) * 100);
+  
+  return (
+    <div className="w-48 space-y-1">
+      <div className="flex justify-between text-[10px] uppercase font-bold tracking-tighter">
         <span className={`truncate ${isMe ? 'text-primary' : 'text-muted-foreground'}`}>{name}</span>
         <span className="shrink-0">{passed}/{total}</span>
       </div>
-      <div className="h-1 sm:h-1.5 w-full bg-muted rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
         <div 
           className={`h-full transition-all duration-500 ${isMe ? 'bg-primary' : 'bg-muted-foreground/50'}`} 
           style={{ width: `${percentage}%` }}
