@@ -7,6 +7,7 @@ import {
 import { eq, and, isNull, or } from "drizzle-orm";
 import { computeElo } from "../lib/elo";
 import { getIo } from "../routes/socket-ref";
+import { logger } from "../lib/logger";
 
 const DISCONNECT_GRACE_MS = 10_000;
 const timers = new Map<string, NodeJS.Timeout>();
@@ -54,7 +55,9 @@ export async function startDisconnectGrace(userId: number): Promise<void> {
 
     const timer = setTimeout(() => {
       timers.delete(k);
-      void awardOpponentWin(match.id, opponentId, userId);
+      awardOpponentWin(match.id, opponentId, userId).catch((err) => {
+        logger.error({ err, matchId: match.id }, "Failed to award forfeit win");
+      });
     }, DISCONNECT_GRACE_MS);
 
     timers.set(k, timer);
@@ -81,7 +84,7 @@ async function awardOpponentWin(
   winnerId: number,
   loserId: number
 ): Promise<void> {
-  await db.transaction(async (tx) => {
+  const result = await db.transaction(async (tx) => {
     const updated = await tx
       .update(matchesTable)
       .set({
@@ -92,7 +95,7 @@ async function awardOpponentWin(
       .where(and(eq(matchesTable.id, matchId), isNull(matchesTable.winnerId)))
       .returning({ id: matchesTable.id });
 
-    if (updated.length === 0) return;
+    if (updated.length === 0) return null;
 
     const [winnerUser] = await tx
       .select({ elo: usersTable.elo, wins: usersTable.wins })
@@ -106,7 +109,7 @@ async function awardOpponentWin(
       .where(eq(usersTable.id, loserId))
       .limit(1);
 
-    if (!winnerUser || !loserUser) return;
+    if (!winnerUser || !loserUser) return null;
 
     const { winnerNewElo, loserNewElo } = computeElo(
       winnerUser.elo,
@@ -140,15 +143,18 @@ async function awardOpponentWin(
       },
     ]);
 
-    const io = getIo();
-    io?.to(`match:${matchId}`).emit("match:finished", {
-      winnerId,
-      eloChange: winnerEloChange,
-      eloChanges: {
-        [winnerId]: winnerEloChange,
-        [loserId]: loserEloChange,
-      },
-      reason: "opponent_disconnected",
-    });
+    return { winnerEloChange, loserEloChange };
+  });
+
+  // Announce the result only after the transaction has committed.
+  if (!result) return;
+  getIo()?.to(`match:${matchId}`).emit("match:finished", {
+    winnerId,
+    eloChange: result.winnerEloChange,
+    eloChanges: {
+      [winnerId]: result.winnerEloChange,
+      [loserId]: result.loserEloChange,
+    },
+    reason: "opponent_disconnected",
   });
 }

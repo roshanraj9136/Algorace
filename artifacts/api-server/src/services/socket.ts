@@ -8,6 +8,7 @@ import { getCorsOrigin } from "../lib/env";
 import { db } from "@workspace/db";
 import { matchesTable } from "@workspace/db/schema";
 import { eq, or } from "drizzle-orm";
+import { logger } from "../lib/logger";
 
 const corsOrigin = getCorsOrigin();
 
@@ -43,25 +44,33 @@ export function createSocketServer(httpServer: HttpServer): SocketServer {
 
     socket.join(`user:${userId}`);
 
+    // Socket.IO does not catch errors thrown by handlers, so each one handles its own.
     socket.on("match:join", async (data: { matchId: number }) => {
       if (!data?.matchId || typeof data.matchId !== "number") return;
-      const [match] = await db
-        .select({ player1Id: matchesTable.player1Id, player2Id: matchesTable.player2Id })
-        .from(matchesTable)
-        .where(eq(matchesTable.id, data.matchId))
-        .limit(1);
-      if (!match || (match.player1Id !== userId && match.player2Id !== userId)) return;
-      socket.join(`match:${data.matchId}`);
-      cancelDisconnectGrace(userId, data.matchId);
+      try {
+        const [match] = await db
+          .select({ player1Id: matchesTable.player1Id, player2Id: matchesTable.player2Id })
+          .from(matchesTable)
+          .where(eq(matchesTable.id, data.matchId))
+          .limit(1);
+        if (!match || (match.player1Id !== userId && match.player2Id !== userId)) return;
+        socket.join(`match:${data.matchId}`);
+        cancelDisconnectGrace(userId, data.matchId);
+      } catch (err) {
+        logger.error({ err, userId, matchId: data.matchId }, "match:join failed");
+      }
     });
 
     socket.on("match:leave", (data: { matchId: number }) => {
+      if (typeof data?.matchId !== "number") return;
       socket.leave(`match:${data.matchId}`);
     });
 
     socket.on("disconnect", () => {
       removeUserFromQueue(userId);
-      void startDisconnectGrace(userId);
+      startDisconnectGrace(userId).catch((err) => {
+        logger.error({ err, userId }, "Failed to start disconnect grace period");
+      });
     });
   });
 

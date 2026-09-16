@@ -12,6 +12,11 @@ httpServer.listen(port, () => {
   logger.info({ port }, "Server listening");
 });
 
+// Last line of defence: log a stray rejection instead of taking every live match down.
+process.on("unhandledRejection", (err) => {
+  logger.error({ err }, "Unhandled promise rejection");
+});
+
 httpServer.on("error", (err) => {
   logger.error({ err }, "Server error");
   process.exit(1);
